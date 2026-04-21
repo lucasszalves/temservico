@@ -9,20 +9,25 @@ import java.util.Scanner;
 
 public class PostgresDB {
     static String JDBC_URL = "jdbc:postgresql://localhost:5432/TODO?currentSchema=public&user=postgres&password=123456";
+
+    // quais colunas tem na tabela de users: serve para analisar de qual tipo é a entrada do login (CPF, nome ou email)
     public enum UsersCols {
         CPF, NAME, EMAIL, PASSWORDHASH
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException, NoSuchAlgorithmException {
+
+        // inicializa a tabela de users e coloca um dado de admin para iniciar
         if(!doesTableExist("users")){
             createUsersTable();
             insertUsersData("11111111111", "admin", "admin@admin.com", SHA256Hasher.hashString("1234"));
         }
-        userTest();
+        //userTest();
         System.out.println(getPasswordHash("admin@admin.com", UsersCols.EMAIL));
 
     }
 
+    // função de teste: insere user com dados inseridos pelo terminal: irá servir para fazer cadastro
     private static void userTest() throws SQLException {
         Connection connection = DriverManager.getConnection(JDBC_URL);
         System.out.print("Quer adicionar um dado de user na tabela? [Y/N]");
@@ -44,6 +49,7 @@ public class PostgresDB {
         }
     }
 
+    // cria tabela de users
     private static void createUsersTable() throws SQLException{
         Connection connection = DriverManager.getConnection(JDBC_URL);
         Statement statement = connection.createStatement();
@@ -58,6 +64,7 @@ public class PostgresDB {
         statement.execute(createTableQuery);
     }
 
+    // insere dados da tabela de users
     public static void insertUsersData(String CPF, String name, String email, String passwordHash) throws SQLException{
         Connection connection = DriverManager.getConnection(JDBC_URL);
         String insertQuery = "INSERT INTO users (CPF, Name, Email, PasswordHash) VALUES (?, ?, ?, ?)";
@@ -69,7 +76,7 @@ public class PostgresDB {
         statement.execute();
     }
 
-    // retorna hash da senha
+    // retorna hash da senha do parametro, depende do tipo do parametro
     public static String getPasswordHash(String param, UsersCols col) throws SQLException {
         Connection connection = DriverManager.getConnection(JDBC_URL);
         String selectQuery;
@@ -94,6 +101,7 @@ public class PostgresDB {
         }
     }
 
+    // verifica se tabela existe
     public static boolean doesTableExist(String tableName) throws SQLException {
         Connection connection = DriverManager.getConnection(JDBC_URL);
         DatabaseMetaData meta = connection.getMetaData();

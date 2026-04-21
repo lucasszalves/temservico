@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SHA256Hasher {
+
+    // faz o hash de uma string e devolve a string em hex
     public static String hashString(String input) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] rawHash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
