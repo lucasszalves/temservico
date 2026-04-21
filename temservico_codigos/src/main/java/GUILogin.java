@@ -6,7 +6,7 @@ import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
-public class GUITest {
+public class GUILogin {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("My First Java GUI");
