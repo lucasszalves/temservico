@@ -76,7 +76,6 @@ public class PostgresDB {
         statement.execute();
     }
 
-    // retorna hash da senha do parametro, depende do tipo do parametro
     public static void updateUserData(String cpf, String novoNome, String novoEmail) throws SQLException {
         Connection connection = DriverManager.getConnection(JDBC_URL);
         String sql = "UPDATE users SET Name = ?, Email = ? WHERE CPF = ?";
@@ -97,7 +96,7 @@ public class PostgresDB {
         connection.close();
     }
 
-    // retorna hash da senha
+    // retorna hash da senha do parametro, depende do tipo do parametro
     public static String getPasswordHash(String param, UsersCols col) throws SQLException {
         Connection connection = DriverManager.getConnection(JDBC_URL);
         String selectQuery;
