@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class GUILogin {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("My First Java GUI");
+        JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         int width = 400;
