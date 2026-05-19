@@ -52,6 +52,14 @@ public class Servico {
         return agendamentos;
     }
 
+    public int getNumAgendamentos() {
+        ArrayList<Agendamento> agendamentos = getAgendamentos();
+        if(agendamentos == null){
+            return 0;
+        }
+        return agendamentos.size();
+    }
+
     public ArrayList<Avaliacao> getAvaliacoes() {
         return avaliacoes;
     }
@@ -98,5 +106,10 @@ public class Servico {
 
     public void setAvaliacoes(ArrayList<Avaliacao> avaliacoes) {
         this.avaliacoes = avaliacoes;
+    }
+
+    @Override
+    public String toString(){
+        return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.prestador.getNome();
     }
 }

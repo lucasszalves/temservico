@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -18,7 +19,6 @@ public class Usuario {
         this.email = email;
         this.nome = nome;
     }
-
 
     public String getCPF() {
         return CPF;
@@ -66,5 +66,35 @@ public class Usuario {
 
     public ArrayList<Agendamento> getAgendamentos() {
         return agendamentos;
+    }
+
+    public void setDatasIndisponiveis(ArrayList<LocalDate> datasIndisponiveis) {
+        this.datasIndisponiveis = datasIndisponiveis;
+    }
+
+    public void setIdsServicosContratados(ArrayList<Integer> idsServicosContratados) {
+        this.idsServicosContratados = idsServicosContratados;
+    }
+
+    public void setIdsServicosFavoritos(ArrayList<Integer> idsServicosFavoritos) {
+        this.idsServicosFavoritos = idsServicosFavoritos;
+    }
+
+    public void setCertificados(ArrayList<Certificado> certificados) {
+        this.certificados = certificados;
+    }
+
+    public void setServicosPrestados(ArrayList<Servico> servicosPrestados) {
+        this.servicosPrestados = servicosPrestados;
+    }
+
+    public void setAgendamentos(ArrayList<Agendamento> agendamentos) {
+        this.agendamentos = agendamentos;
+    }
+
+    public void addServicosPrestados(Servico servico){
+        ArrayList<Servico> servicos = getServicosPrestados();
+        servicos.add(servico);
+        this.setServicosPrestados(servicos);
     }
 }
