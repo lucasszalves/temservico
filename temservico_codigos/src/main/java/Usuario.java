@@ -1,4 +1,7 @@
+import sec.SHA256Hasher;
+
 import java.lang.reflect.Array;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -7,6 +10,7 @@ public class Usuario {
     private String CPF;
     private String email;
     private String nome;
+    private String hashSenha;
     private ArrayList<LocalDate> datasIndisponiveis;
     private ArrayList<Integer> idsServicosContratados;
     private ArrayList<Integer> idsServicosFavoritos;
@@ -18,6 +22,13 @@ public class Usuario {
         this.CPF = CPF;
         this.email = email;
         this.nome = nome;
+    }
+
+    Usuario(String CPF, String email, String nome, String senha) throws NoSuchAlgorithmException {
+        this.CPF = CPF;
+        this.email = email;
+        this.nome = nome;
+        this.hashSenha = SHA256Hasher.hashString(senha);
     }
 
     public String getCPF() {
@@ -96,5 +107,42 @@ public class Usuario {
         ArrayList<Servico> servicos = getServicosPrestados();
         servicos.add(servico);
         this.setServicosPrestados(servicos);
+    }
+
+    public void editaServico(int id, EditorServicoConfigs configs){
+        for(Servico servico : this.servicosPrestados){
+            if (servico.getId() == id){
+                if (configs.isEditaCidades()){
+                    servico.setCidades(configs.getNovasCidades());
+                }
+                if (configs.isEditaDatasIndisp()){
+                    servico.setDatasIndisponiveis(configs.getNovasDatasIndisp());
+                }
+                if (configs.isEditaPreco()){
+                    servico.setPreco(configs.getNovoPreco());
+                }
+                if (configs.isEditaTipo()){
+                    servico.setTipo(configs.getNovoTipo());
+                }
+                return;
+            }
+        }
+    }
+
+    public void excluiServico(int id){
+        for(Servico servico : this.servicosPrestados){
+            if (servico.getId() == id){
+                this.servicosPrestados.remove(servico);
+                return;
+            }
+        }
+    }
+
+    public String getHashSenha() {
+        return hashSenha;
+    }
+
+    public void setHashSenha(String hashSenha) {
+        this.hashSenha = hashSenha;
     }
 }

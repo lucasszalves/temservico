@@ -1,28 +1,33 @@
-import db.PostgresDB;
+import db_deprecated.PostgresDB;
 import sec.SHA256Hasher;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Array;
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class viewUsuario {
 
     private static Servico servicoSelecionado;
+    private static ArrayList<Usuario> usuariosGerais;
+    private static final int leftMargin = 30;
+    private static final int supMargin = 100;
+    private static final int fieldHeight = 30;
+    private static final int fieldHeight2 = 25;
+    private static final int widthLabels = 300;
+
+    public enum UsersCols {
+        CPF, NAME, EMAIL, PASSWORDHASH
+    }
 
     public static void janelaServicosPrestados(Usuario usuario){
         JFrame frame = new JFrame("Serviços prestados");
@@ -33,8 +38,7 @@ public class viewUsuario {
         int height = 300;
         Dimension dimension = new Dimension(width, height);
 
-        // gera o painel principal de login
-        JPanel panel = servicosJPanel(width, height, usuario);
+        JPanel panel = servicosJPanel(width, height, usuario, frame);
 
         panel.setPreferredSize(dimension);
         panel.setMaximumSize(dimension);
@@ -51,11 +55,9 @@ public class viewUsuario {
         frame.setVisible(true);
     }
 
-    private static JPanel servicosJPanel(int width, int height, Usuario usuario) {
+    private static JPanel servicosJPanel(int width, int height, Usuario usuario, JFrame framePai) {
         JPanel panel = new JPanel();
         panel.setLayout(null);
-
-        int fieldHeight = 25;
 
         JLabel title = new JLabel("Serviços Prestados", SwingConstants.CENTER);
         title.setBounds(width/2 - 100, 10, 200, fieldHeight + 10);
@@ -67,6 +69,7 @@ public class viewUsuario {
         nomeUserLabel.setBounds(0, 30 + fieldHeight, width, fieldHeight);
         panel.add(nomeUserLabel);
 
+        // gera tabela de servicos do usuário
         ArrayList<Servico> servicos = usuario.getServicosPrestados();
 
         String[] colunas = {"ID", "Tipo", "Preço", "Nota média", "Nº de agendamentos"};
@@ -83,7 +86,7 @@ public class viewUsuario {
         DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Torna as células não editáveis diretamente
+                return false;
             }
         };
         JTable tabela = new JTable(modelo);
@@ -109,13 +112,9 @@ public class viewUsuario {
         tabela.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Verifica se foi um clique duplo (evita cliques acidentais)
                 int linhaSelecionada = tabela.getSelectedRow();
 
-                // Garante que o usuário realmente clicou em uma linha válida
                 if (linhaSelecionada != -1) {
-                    // Pegar os dados da linha clicada
-//                    Object id = tabela.getValueAt(linhaSelecionada, 0);
                     Servico servico = usuario.getServicosPrestados().get(linhaSelecionada);
 
                     editarButton.setEnabled(true);
@@ -126,34 +125,25 @@ public class viewUsuario {
             }
         });
 
+        // clicou na opção de novo serviço
         novoServicoButton.addActionListener(e -> {
-            janelaNovoServico(usuario);
+            janelaNovoServico(usuario, framePai);
         });
 
+        // selecionou um serviço e clicou no botão de editar
         editarButton.addActionListener(e -> {
-            if(servicoSelecionado.getNumAgendamentos() >= 1){
-                String mensagem = "Serviço de ID " + servicoSelecionado.getId() + " possui agendamentos, portanto ele não pode ser editado.";
-                JOptionPane.showMessageDialog(null, mensagem);
-            }
-            else{
-                janelaEditaServico(servicoSelecionado);
-            }
+            janelaEditaServico(servicoSelecionado, usuario, framePai);
         });
 
+        // selecionou um serviço e clicou no botão de excluir
         excluirButton.addActionListener(e -> {
-            if(servicoSelecionado.getNumAgendamentos() >= 1){
-                String mensagem = "Serviço de ID " + servicoSelecionado.getId() + " possui agendamentos, portanto ele não pode ser editado.";
-                JOptionPane.showMessageDialog(null, mensagem);
-            }
-            else{
-                janelaEditaServico(servicoSelecionado);
-            }
+            janelaExcluiServico(servicoSelecionado, usuario, framePai);
         });
 
         return panel;
     }
 
-    private static void janelaNovoServico(Usuario usuario) {
+    private static void janelaNovoServico(Usuario usuario, JFrame framePai) {
         JFrame frame = new JFrame("Novo serviço");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         int width = 500;
@@ -162,15 +152,9 @@ public class viewUsuario {
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
 
-        int leftMargin = 30;
-        int supMargin = 100;
-        int fieldHeight = 30;
-        int fieldHeight2 = 25;
-        int widthLabels = 300;
-
         JLabel title = new JLabel("Novo serviço");
         title.setFont(title.getFont().deriveFont(20.0f));
-        title.setBounds(leftMargin, supMargin-20, 300, 30);
+        title.setBounds(leftMargin, supMargin-20, 300, fieldHeight);
         frame.add(title);
 
         JLabel tipoServicoLabel = new JLabel("Tipo do serviço: ");
@@ -225,58 +209,359 @@ public class viewUsuario {
             String datasInput = datasText.getText().strip();
             int precoInput = (int) precoSpinner.getValue();
             TipoServico tipoServico = (TipoServico) comboTipo.getSelectedItem();
+            SaidaValidadaValoresServico saida = validaValoresServico(true, true, cidadesInput, datasInput);
 
-            // verifica inputs
-            if(cidadesInput.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Insira pelo menos uma cidade.");
+            // se tudo correu bem, cria novo serviço, atualiza lista de serviços prestados do usuário (para consistência)
+            // e atualiza tabela
+            if(saida.isValido()) {
+                Servico novoServico = new Servico(tipoServico, precoInput, saida.getDatas(), saida.getCidades(), usuario);
+                usuario.addServicosPrestados(novoServico);
+                JOptionPane.showMessageDialog(null, "Serviço criado com sucesso!");
+                framePai.dispose();
+                janelaServicosPrestados(usuario);
+                frame.dispose();
             }
-
-            String[] cidadesStrings = cidadesInput.split(",");
-            ArrayList<String> cidades = new ArrayList<>(Arrays.asList(cidadesStrings));
-
-            String[] datasStrings = datasInput.split(",");
-            ArrayList<LocalDate> datasIndisponiveis = new ArrayList<>();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            try {
-                for (String data : datasStrings) {
-                    data = data.strip();
-                    datasIndisponiveis.add(LocalDate.parse(data, formatter));
-                }
-            } catch (DateTimeParseException ex) {
-                JOptionPane.showMessageDialog(null, "Insira uma data válida.");
-            }
-
-            Servico novoServico = new Servico(2, tipoServico, precoInput, datasIndisponiveis, cidades, usuario);
-            usuario.addServicosPrestados(novoServico);
-            JOptionPane.showMessageDialog(null, "Serviço criado com sucesso!");
-
-
-
         });
 
-
-            frame.setVisible(true);
+        frame.setVisible(true);
     }
 
-    private static void janelaEditaServico(Servico servicoSelecionado) {
-        JFrame frame = new JFrame("Editar serviço");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        int width = 500;
-        int height = 500;
-        frame.setSize(width, height);
-        frame.setLocationRelativeTo(null);
+    private static void janelaEditaServico(Servico servicoSelecionado, Usuario prestador, JFrame framePai) {
+        boolean haAgendamentos = haAgendamentosParaServico(servicoSelecionado);
 
-        JLabel title = new JLabel("Editar serviço", SwingConstants.CENTER);
-        title.setFont(title.getFont().deriveFont(20.0f));
-        frame.add(title);
+        if(!haAgendamentos) {
+            JFrame frame = new JFrame("Editar serviço");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            int width = 700;
+            int height = 500;
+            frame.setSize(width, height);
+            frame.setLocationRelativeTo(null);
+            frame.setLayout(null);
+            int leftMargin2 = leftMargin + widthLabels + 10;
 
+            JLabel title = new JLabel("Editar serviço");
+            title.setFont(title.getFont().deriveFont(20.0f));
+            title.setBounds(leftMargin, supMargin - 20, width, fieldHeight);
+            frame.add(title);
 
+            JLabel dadosLabel = new JLabel("Dados do serviço:");
+            dadosLabel.setFont(dadosLabel.getFont().deriveFont(15.0f));
+            dadosLabel.setBounds(leftMargin, supMargin + fieldHeight, widthLabels, fieldHeight);
+            frame.add(dadosLabel);
 
+            JLabel idLabel = new JLabel("ID: " + servicoSelecionado.getId());
+            idLabel.setBounds(leftMargin, supMargin + fieldHeight * 2, widthLabels, fieldHeight);
+            frame.add(idLabel);
 
-        frame.setVisible(true);
+            JLabel tipoLabel = new JLabel("Tipo: " + servicoSelecionado.getTipo());
+            tipoLabel.setBounds(leftMargin, supMargin + fieldHeight * 3, widthLabels, fieldHeight);
+            frame.add(tipoLabel);
+
+            JLabel precoLabel = new JLabel("Preço: " + servicoSelecionado.getPreco());
+            precoLabel.setBounds(leftMargin, supMargin + fieldHeight * 4, widthLabels, fieldHeight);
+            frame.add(precoLabel);
+
+            JLabel notaMediaLabel = new JLabel("Nota média: " + servicoSelecionado.getNotaMedia());
+            notaMediaLabel.setBounds(leftMargin, supMargin + fieldHeight * 5, widthLabels, fieldHeight);
+            frame.add(notaMediaLabel);
+
+            JLabel nomePrestadorLabel = new JLabel("Nome do prestador: " + prestador.getNome());
+            nomePrestadorLabel.setBounds(leftMargin, supMargin + fieldHeight * 6, widthLabels, fieldHeight);
+            frame.add(nomePrestadorLabel);
+
+            JLabel cidadesLabel = new JLabel("Cidades de atendimento: " + servicoSelecionado.getCidades().toString().substring(1, servicoSelecionado.getCidades().toString().length() - 1));
+            cidadesLabel.setBounds(leftMargin, supMargin + fieldHeight * 7, widthLabels, fieldHeight);
+            frame.add(cidadesLabel);
+
+            ArrayList<LocalDate> datasIndisp = servicoSelecionado.getDatasIndisponiveis();
+            String datasIndispString;
+            if (datasIndisp.isEmpty()) {
+                datasIndispString = "não há";
+            } else {
+                datasIndispString = datasIndisp.toString().substring(1, datasIndisp.toString().length() - 1);
+            }
+
+            JLabel datasIndispLabel = new JLabel("Datas indisponíveis: " + datasIndispString);
+            datasIndispLabel.setBounds(leftMargin, supMargin + fieldHeight * 8, widthLabels, fieldHeight);
+            frame.add(datasIndispLabel);
+
+            // ===============================================================
+
+            JLabel instrucoesEditarLabel = new JLabel("Assinale os campos a serem editados:");
+            instrucoesEditarLabel.setFont(instrucoesEditarLabel.getFont().deriveFont(15.0f));
+            instrucoesEditarLabel.setBounds(leftMargin2, supMargin, widthLabels, fieldHeight);
+            frame.add(instrucoesEditarLabel);
+
+            JLabel instrucoesEditarLabel2 = new JLabel("(Campos de cidade e datas, separe por vírgula)");
+            instrucoesEditarLabel2.setBounds(leftMargin2, supMargin + fieldHeight, widthLabels, fieldHeight);
+            frame.add(instrucoesEditarLabel2);
+
+            JComboBox<TipoServico> novoTipoCombo = new JComboBox<>(TipoServico.values());
+            novoTipoCombo.setBounds(leftMargin2 + 30, supMargin + fieldHeight * 3, widthLabels - 30, fieldHeight);
+            novoTipoCombo.setEnabled(false);
+            frame.add(novoTipoCombo);
+            JCheckBox checkBoxTipo = new JCheckBox();
+            checkBoxTipo.setBounds(leftMargin2, supMargin + fieldHeight * 3, 25, 25);
+            checkBoxTipo.addItemListener(e -> {
+                novoTipoCombo.setEnabled(checkBoxTipo.isSelected());
+            });
+            frame.add(checkBoxTipo);
+
+            SpinnerModel model = new SpinnerNumberModel(0, 0, 10000, 1);
+            JSpinner novoPrecoSpinner = new JSpinner(model);
+            novoPrecoSpinner.setBounds(leftMargin2 + 30, supMargin + fieldHeight * 4, widthLabels - 30, fieldHeight);
+            novoPrecoSpinner.setEnabled(false);
+            frame.add(novoPrecoSpinner);
+            JCheckBox checkBoxPreco = new JCheckBox();
+            checkBoxPreco.setBounds(leftMargin2, supMargin + fieldHeight * 4, 25, 25);
+            checkBoxPreco.addItemListener(e -> {
+                novoPrecoSpinner.setEnabled(checkBoxPreco.isSelected());
+            });
+            frame.add(checkBoxPreco);
+
+            JTextField novasCidadesText = new JTextField(20);
+            novasCidadesText.setBounds(leftMargin2 + 30, supMargin + fieldHeight * 7, widthLabels - 30, fieldHeight);
+            novasCidadesText.setEnabled(false);
+            frame.add(novasCidadesText);
+            JCheckBox checkBoxCidades = new JCheckBox();
+            checkBoxCidades.setBounds(leftMargin2, supMargin + fieldHeight * 7, 25, 25);
+            checkBoxCidades.addItemListener(e -> {
+                novasCidadesText.setEnabled(checkBoxCidades.isSelected());
+            });
+            frame.add(checkBoxCidades);
+
+            JTextField novasDatasText = new JTextField(20);
+            novasDatasText.setBounds(leftMargin2 + 30, supMargin + fieldHeight * 8, widthLabels - 30, fieldHeight);
+            novasDatasText.setEnabled(false);
+            frame.add(novasDatasText);
+            JCheckBox checkBoxDatas = new JCheckBox();
+            checkBoxDatas.setBounds(leftMargin2, supMargin + fieldHeight * 8, 25, 25);
+            checkBoxDatas.addItemListener(e -> {
+                novasDatasText.setEnabled(checkBoxDatas.isSelected());
+            });
+            frame.add(checkBoxDatas);
+
+            JButton confirmarButton = new JButton("Confirmar");
+            confirmarButton.setBounds(width / 2 - widthLabels / 2, supMargin + fieldHeight * 9 + 30, widthLabels, fieldHeight);
+            frame.add(confirmarButton);
+
+            confirmarButton.addActionListener(e -> {
+                String cidadesInput = novasCidadesText.getText().strip();
+                String datasInput = novasDatasText.getText().strip();
+                int precoInput = (int) novoPrecoSpinner.getValue();
+                TipoServico tipoServico = (TipoServico) novoTipoCombo.getSelectedItem();
+                EditorServicoConfigs configs = new EditorServicoConfigs(servicoSelecionado.getId(), checkBoxCidades.isSelected(), checkBoxDatas.isSelected(), checkBoxPreco.isSelected(), checkBoxTipo.isSelected());
+                SaidaValidadaValoresServico saida = validaValoresServico(configs.isEditaCidades(), configs.isEditaDatasIndisp(), cidadesInput, datasInput);
+
+                if (saida.isValido()) {
+                    if (configs.isEditaTipo()) {
+                        configs.setNovoTipo(tipoServico);
+                    }
+                    if (configs.isEditaPreco()) {
+                        configs.setNovoPreco(precoInput);
+                    }
+                    if (configs.isEditaCidades()) {
+                        configs.setNovasCidades(saida.getCidades());
+                    }
+                    if (configs.isEditaDatasIndisp()) {
+                        configs.setNovasDatasIndisp(saida.getDatas());
+                    }
+                    prestador.editaServico(servicoSelecionado.getId(), configs);
+                    JOptionPane.showMessageDialog(null, "Serviço editado com sucesso!");
+                    framePai.dispose();
+                    janelaServicosPrestados(prestador);
+                    frame.dispose();
+                }
+            });
+            frame.setVisible(true);
+        }
+        else{
+            String mensagem = "Serviço de ID " + servicoSelecionado.getId() + " possui agendamentos, portanto ele não pode ser editado.";
+            JOptionPane.showMessageDialog(null, mensagem);
+        }
+    }
+
+    private static void janelaExcluiServico(Servico servicoSelecionado, Usuario usuario, JFrame framePai) {
+        int resposta = JOptionPane.showConfirmDialog(
+                framePai,
+                "Deseja realmente excluir o serviço?",
+                "Confirma?",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (resposta == JOptionPane.OK_OPTION) {
+            usuario.excluiServico(servicoSelecionado.getId());
+            framePai.dispose();
+            janelaServicosPrestados(usuario);
+        }
+    }
+
+    private static SaidaValidadaValoresServico validaValoresServico(boolean validaCidades, boolean validaDatas, String cidadesInput, String datasInput) {
+        SaidaValidadaValoresServico saida = new SaidaValidadaValoresServico();
+
+        if(validaCidades) {
+            if (cidadesInput.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Insira pelo menos uma cidade.");
+                saida.setValido(false);
+                return saida;
+            }
+            String[] cidadesStrings = cidadesInput.split(",");
+            saida.setCidades(new ArrayList<>(Arrays.asList(cidadesStrings)));
+        }
+
+        if(validaDatas) {
+            ArrayList<LocalDate> datasIndisponiveis = new ArrayList<>();
+            if (!datasInput.isEmpty()) {
+                String[] datasStrings = datasInput.split(",");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                try {
+                    for (String data : datasStrings) {
+                        data = data.strip();
+                        datasIndisponiveis.add(LocalDate.parse(data, formatter));
+                    }
+                } catch (DateTimeParseException ex) {
+                    JOptionPane.showMessageDialog(null, "Insira uma data válida.");
+                    saida.setValido(false);
+                    return saida;
+                }
+            }
+            saida.setDatas(datasIndisponiveis);
+        }
+        saida.setValido(true);
+        return saida;
+    }
+
+    private static boolean haAgendamentosParaServico(Servico servico) {
+        return (servico.getNumAgendamentos() > 0);
     }
 
     private static void atualizaServicoSelecionado(Object servico) {
         servicoSelecionado = (Servico) servico;
     }
-}
+
+    public static void janelaLogin(ArrayList<Usuario> usuarios){
+        usuariosGerais = usuarios;
+        JFrame frame = new JFrame("Login");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+        int width = 400;
+        int height = 300;
+        Dimension dimension = new Dimension(width, height);
+
+        // gera o painel principal de login
+        JPanel panel = loginJPanel(width, height);
+
+        panel.setPreferredSize(dimension);
+        panel.setMaximumSize(dimension);
+        panel.setMinimumSize(dimension);
+
+        Box box = new Box(BoxLayout.Y_AXIS);
+
+        box.add(Box.createVerticalGlue());
+        box.add(panel);
+        box.add(Box.createVerticalGlue());
+
+        frame.add(box);
+
+        frame.setVisible(true);
+    }
+
+    private static JPanel loginJPanel(int width, int height) {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        int fieldHeight = 25;
+
+        JLabel title = new JLabel("TemServiço?", SwingConstants.CENTER);
+        title.setBounds(width/2 - 80, 10, 160, fieldHeight + 10);
+        title.setFont(title.getFont().deriveFont(20.0f));
+        panel.add(title);
+
+        JLabel usrLabel = new JLabel("CPF/Nome/Email:");
+        usrLabel.setBounds(width/2 - 125, 55, 110, fieldHeight);
+        panel.add(usrLabel);
+        JTextField usrText = new JTextField(20);
+        usrText.setBounds(width/2 - 125 + 110, 55, 140, fieldHeight);
+        panel.add(usrText);
+
+        JLabel pswrdLabel = new JLabel("Senha:");
+        pswrdLabel.setBounds(width/2 - 125, 55 + fieldHeight, 110, fieldHeight);
+        panel.add(pswrdLabel);
+
+        JPasswordField pswrdText = new JPasswordField(20);
+        pswrdText.setBounds(width/2 - 125 + 110, 55 + fieldHeight, 140, fieldHeight);
+        panel.add(pswrdText);
+
+        JButton loginButton = new JButton("Login");
+        loginButton.setBounds(width/2 - 50, 75 + fieldHeight * 2, 100, fieldHeight);
+        panel.add(loginButton);
+
+        JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
+        messageLabel.setBounds(width/2 - 150, 80 + fieldHeight * 3, 300, fieldHeight);
+        panel.add(messageLabel);
+
+        loginButton.addActionListener(e -> {
+            String loginInput = usrText.getText();
+
+            // checa o tipo do input no primeiro campo (CPF, nome ou email)
+            UsersCols loginType = checkLoginInput(loginInput);
+
+            String inputPasswordHash = null;
+            try {
+                // faz o hash da senha
+                inputPasswordHash = SHA256Hasher.hashString(new String(pswrdText.getPassword()));
+            } catch (NoSuchAlgorithmException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            // pega o hash da senha associado à entrada, armazenado na lista e compara com o hash da senha de entrada
+            if(getPasswordHash(loginInput, loginType).equals(inputPasswordHash)){
+                messageLabel.setText("Sucesso! Entrando na plataforma.");
+            }
+            else{
+                messageLabel.setText("Senha incorreta ou usuário não existe.");
+            }
+
+        });
+
+        return panel;
+    }
+
+    private static UsersCols checkLoginInput(String loginInput) {
+        if(myUtils.isNumeric(loginInput) && loginInput.length() == 11){
+            return UsersCols.CPF;
+        }
+        if(loginInput.contains("@")){
+            return UsersCols.EMAIL;
+        }
+        return UsersCols.NAME;
+    }
+
+    public static String getPasswordHash(String param, UsersCols col) {
+        for(Usuario usuario : usuariosGerais){
+            switch (col){
+                case NAME -> {
+                    if(Objects.equals(param, usuario.getNome())){
+                        return usuario.getHashSenha();
+                    }
+                }
+                case EMAIL -> {
+                    if(Objects.equals(param, usuario.getEmail())){
+                        return usuario.getHashSenha();
+                    }
+                }
+                case CPF -> {
+                    if(Objects.equals(param, usuario.getCPF())){
+                        return usuario.getHashSenha();
+                    }
+                }
+                default -> {
+                    return "";
+                }
+            }
+        }
+        return "";
+    }
+
+    }
