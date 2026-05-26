@@ -1,6 +1,6 @@
 package controller;
 
-import db.PostgresDB;
+import db_deprecated.PostgresDB;
 import sec.SHA256Hasher;
 import java.sql.SQLException;
 

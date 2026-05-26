@@ -1,4 +1,4 @@
-package db;
+package db_deprecated;
 
 import org.postgresql.util.PSQLException;
 import sec.SHA256Hasher;

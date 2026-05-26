@@ -12,6 +12,7 @@ enum TipoServico{
 
 public class Servico {
     private int id;
+    static int idClasse = 0;
     private ArrayList<String> cidades;
     private ArrayList<LocalDate> datasIndisponiveis;
     private ArrayList<String> imagensPaths;
@@ -22,14 +23,16 @@ public class Servico {
     private TipoServico tipo;
     private Usuario prestador;
 
-    Servico(int id, TipoServico tipo, double preco, ArrayList<LocalDate> datasIndisponiveis, ArrayList<String> cidades, Usuario prestador){
-        this.id = id;
+    Servico(TipoServico tipo, double preco, ArrayList<LocalDate> datasIndisponiveis, ArrayList<String> cidades, Usuario prestador){
+        this.id = idClasse;
         this.tipo = tipo;
         this.preco = preco;
         this.datasIndisponiveis = datasIndisponiveis;
         this.cidades = cidades;
         this.prestador = prestador;
         this.notaMedia = 0;
+
+        idClasse++;
     }
 
     public Usuario getPrestador() {
@@ -50,6 +53,14 @@ public class Servico {
 
     public ArrayList<Agendamento> getAgendamentos() {
         return agendamentos;
+    }
+
+    public int getNumAgendamentos() {
+        ArrayList<Agendamento> agendamentos = getAgendamentos();
+        if(agendamentos == null){
+            return 0;
+        }
+        return agendamentos.size();
     }
 
     public ArrayList<Avaliacao> getAvaliacoes() {
@@ -98,5 +109,10 @@ public class Servico {
 
     public void setAvaliacoes(ArrayList<Avaliacao> avaliacoes) {
         this.avaliacoes = avaliacoes;
+    }
+
+    @Override
+    public String toString(){
+        return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.prestador.getNome();
     }
 }
