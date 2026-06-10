@@ -1,14 +1,7 @@
+package model;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
-
-enum TipoServico{
-    LIMPEZA,
-    ENCANAMENTO,
-    ELETRICA,
-    CUIDADOGERIATRICO,
-    CONSTRUCAO,
-    MARCENARIA
-}
 
 public class Servico {
     private int id;
@@ -23,7 +16,7 @@ public class Servico {
     private TipoServico tipo;
     private Usuario prestador;
 
-    Servico(TipoServico tipo, double preco, ArrayList<LocalDate> datasIndisponiveis, ArrayList<String> cidades, Usuario prestador){
+    public Servico(TipoServico tipo, double preco, ArrayList<LocalDate> datasIndisponiveis, ArrayList<String> cidades, Usuario prestador){
         this.id = idClasse;
         this.tipo = tipo;
         this.preco = preco;

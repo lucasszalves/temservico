@@ -1,3 +1,11 @@
+package guiTests;
+
+import model.Agendamento;
+import model.Servico;
+import model.TipoServico;
+import model.Usuario;
+import view.viewServicosPrestados;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -17,6 +25,6 @@ public class GUIServicosPrestados_Teste {
         servicos.add(servico1);
         user1.setServicosPrestados(servicos);
         // simula um clique para abrir a janela de serviços prestados
-        viewUsuario.janelaServicosPrestados(user1);
+        viewServicosPrestados.janelaServicosPrestados(user1);
     }
 }

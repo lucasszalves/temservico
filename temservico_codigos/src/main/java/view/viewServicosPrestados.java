@@ -1,4 +1,10 @@
-import db_deprecated.PostgresDB;
+package view;
+
+import controller.EditorServicoConfigs;
+import controller.myUtils;
+import model.Servico;
+import model.TipoServico;
+import model.Usuario;
 import sec.SHA256Hasher;
 
 import javax.swing.*;
@@ -7,7 +13,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -15,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class viewUsuario {
+public class viewServicosPrestados {
 
     private static Servico servicoSelecionado;
     private static ArrayList<Usuario> usuariosGerais;

@@ -1,3 +1,5 @@
+package model;
+
 import java.time.LocalDate;
 
 public class Agendamento {
@@ -6,7 +8,7 @@ public class Agendamento {
     private Usuario contratante;
     private LocalDate data;
 
-    Agendamento(int id, Servico servico, Usuario contratante, LocalDate data){
+    public Agendamento(int id, Servico servico, Usuario contratante, LocalDate data){
         this.id = id;
         this.servico = servico;
         this.contratante = contratante;

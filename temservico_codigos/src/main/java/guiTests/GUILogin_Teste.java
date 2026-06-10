@@ -1,3 +1,8 @@
+package guiTests;
+
+import model.Usuario;
+import view.viewServicosPrestados;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
@@ -9,7 +14,7 @@ public class GUILogin_Teste {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         usuarios.add(user1);
         usuarios.add(user2);
-        viewUsuario.janelaLogin(usuarios);
+        viewServicosPrestados.janelaLogin(usuarios);
     }
 
 }

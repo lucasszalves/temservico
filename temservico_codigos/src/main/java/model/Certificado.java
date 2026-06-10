@@ -1,3 +1,5 @@
+package model;
+
 public class Certificado {
     private int id;
     private String filePath;

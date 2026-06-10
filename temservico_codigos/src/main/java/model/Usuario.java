@@ -1,6 +1,8 @@
+package model;
+
+import controller.EditorServicoConfigs;
 import sec.SHA256Hasher;
 
-import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,13 +20,13 @@ public class Usuario {
     private ArrayList<Servico> servicosPrestados;
     private ArrayList<Agendamento> agendamentos;
 
-    Usuario(String CPF, String email, String nome){
+    public Usuario(String CPF, String email, String nome){
         this.CPF = CPF;
         this.email = email;
         this.nome = nome;
     }
 
-    Usuario(String CPF, String email, String nome, String senha) throws NoSuchAlgorithmException {
+    public Usuario(String CPF, String email, String nome, String senha) throws NoSuchAlgorithmException {
         this.CPF = CPF;
         this.email = email;
         this.nome = nome;
