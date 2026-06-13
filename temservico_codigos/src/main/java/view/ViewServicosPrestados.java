@@ -1,26 +1,22 @@
 package view;
 
 import controller.EditorServicoConfigs;
-import controller.myUtils;
 import model.Servico;
 import model.TipoServico;
 import model.Usuario;
-import sec.SHA256Hasher;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
-public class viewServicosPrestados {
+public class ViewServicosPrestados {
 
     private static Servico servicoSelecionado;
     private static ArrayList<Usuario> usuariosGerais;
@@ -445,128 +441,4 @@ public class viewServicosPrestados {
         servicoSelecionado = (Servico) servico;
     }
 
-    public static void janelaLogin(ArrayList<Usuario> usuarios){
-        usuariosGerais = usuarios;
-        JFrame frame = new JFrame("Login");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 500);
-        int width = 400;
-        int height = 300;
-        Dimension dimension = new Dimension(width, height);
-
-        // gera o painel principal de login
-        JPanel panel = loginJPanel(width, height);
-
-        panel.setPreferredSize(dimension);
-        panel.setMaximumSize(dimension);
-        panel.setMinimumSize(dimension);
-
-        Box box = new Box(BoxLayout.Y_AXIS);
-
-        box.add(Box.createVerticalGlue());
-        box.add(panel);
-        box.add(Box.createVerticalGlue());
-
-        frame.add(box);
-
-        frame.setVisible(true);
-    }
-
-    private static JPanel loginJPanel(int width, int height) {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-
-        int fieldHeight = 25;
-
-        JLabel title = new JLabel("TemServiço?", SwingConstants.CENTER);
-        title.setBounds(width/2 - 80, 10, 160, fieldHeight + 10);
-        title.setFont(title.getFont().deriveFont(20.0f));
-        panel.add(title);
-
-        JLabel usrLabel = new JLabel("CPF/Nome/Email:");
-        usrLabel.setBounds(width/2 - 125, 55, 110, fieldHeight);
-        panel.add(usrLabel);
-        JTextField usrText = new JTextField(20);
-        usrText.setBounds(width/2 - 125 + 110, 55, 140, fieldHeight);
-        panel.add(usrText);
-
-        JLabel pswrdLabel = new JLabel("Senha:");
-        pswrdLabel.setBounds(width/2 - 125, 55 + fieldHeight, 110, fieldHeight);
-        panel.add(pswrdLabel);
-
-        JPasswordField pswrdText = new JPasswordField(20);
-        pswrdText.setBounds(width/2 - 125 + 110, 55 + fieldHeight, 140, fieldHeight);
-        panel.add(pswrdText);
-
-        JButton loginButton = new JButton("Login");
-        loginButton.setBounds(width/2 - 50, 75 + fieldHeight * 2, 100, fieldHeight);
-        panel.add(loginButton);
-
-        JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
-        messageLabel.setBounds(width/2 - 150, 80 + fieldHeight * 3, 300, fieldHeight);
-        panel.add(messageLabel);
-
-        loginButton.addActionListener(e -> {
-            String loginInput = usrText.getText();
-
-            // checa o tipo do input no primeiro campo (CPF, nome ou email)
-            UsersCols loginType = checkLoginInput(loginInput);
-
-            String inputPasswordHash = null;
-            try {
-                // faz o hash da senha
-                inputPasswordHash = SHA256Hasher.hashString(new String(pswrdText.getPassword()));
-            } catch (NoSuchAlgorithmException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            // pega o hash da senha associado à entrada, armazenado na lista e compara com o hash da senha de entrada
-            if(getPasswordHash(loginInput, loginType).equals(inputPasswordHash)){
-                messageLabel.setText("Sucesso! Entrando na plataforma.");
-            }
-            else{
-                messageLabel.setText("Senha incorreta ou usuário não existe.");
-            }
-
-        });
-
-        return panel;
-    }
-
-    private static UsersCols checkLoginInput(String loginInput) {
-        if(myUtils.isNumeric(loginInput) && loginInput.length() == 11){
-            return UsersCols.CPF;
-        }
-        if(loginInput.contains("@")){
-            return UsersCols.EMAIL;
-        }
-        return UsersCols.NAME;
-    }
-
-    public static String getPasswordHash(String param, UsersCols col) {
-        for(Usuario usuario : usuariosGerais){
-            switch (col){
-                case NAME -> {
-                    if(Objects.equals(param, usuario.getNome())){
-                        return usuario.getHashSenha();
-                    }
-                }
-                case EMAIL -> {
-                    if(Objects.equals(param, usuario.getEmail())){
-                        return usuario.getHashSenha();
-                    }
-                }
-                case CPF -> {
-                    if(Objects.equals(param, usuario.getCPF())){
-                        return usuario.getHashSenha();
-                    }
-                }
-                default -> {
-                    return "";
-                }
-            }
-        }
-        return "";
-    }
-
-    }
+}
