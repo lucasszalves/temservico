@@ -1,18 +1,23 @@
 package controller;
 
 import model.Usuario;
+import sec.SHA256Hasher;
 import view.ViewLogin;
 import view.ViewServicosPrestados;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ControllerLogin {
     private ArrayList<Usuario> usuariosGerais;
     private ViewLogin viewLogin;
+    private MainController mainController;
+    private Usuario usuarioLogado;
 
-    public ControllerLogin(ArrayList<Usuario> usuarios){
+    public ControllerLogin(ArrayList<Usuario> usuarios, MainController mainControllerInput){
         usuariosGerais = usuarios;
+        mainController = mainControllerInput;
         viewLogin = new ViewLogin(this);
     }
 
@@ -20,39 +25,50 @@ public class ControllerLogin {
         viewLogin.janelaLogin();
     }
 
-    public ViewServicosPrestados.UsersCols checkLoginInput(String loginInput) {
+    public LoginTypes checkLoginInput(String loginInput) {
         if(myUtils.isNumeric(loginInput) && loginInput.length() == 11){
-            return ViewServicosPrestados.UsersCols.CPF;
+            return LoginTypes.CPF;
         }
         if(loginInput.contains("@")){
-            return ViewServicosPrestados.UsersCols.EMAIL;
+            return LoginTypes.EMAIL;
         }
-        return ViewServicosPrestados.UsersCols.NAME;
+        return LoginTypes.NAME;
     }
 
-    public String getPasswordHash(String param, ViewServicosPrestados.UsersCols col) {
+    public boolean validLogin(String loginInput, String password) throws NoSuchAlgorithmException {
+        LoginTypes loginType = checkLoginInput(loginInput);
+        boolean resultado = false;
+        String passwordHashInput = SHA256Hasher.hashString(password);
         for(Usuario usuario : usuariosGerais){
-            switch (col){
+            switch (loginType){
                 case NAME -> {
-                    if(Objects.equals(param, usuario.getNome())){
-                        return usuario.getHashSenha();
+                    if(loginInput.equals(usuario.getNome()) && passwordHashInput.equals(usuario.getHashSenha())){
+                        resultado = true;
                     }
                 }
                 case EMAIL -> {
-                    if(Objects.equals(param, usuario.getEmail())){
-                        return usuario.getHashSenha();
+                    if(loginInput.equals(usuario.getEmail()) && passwordHashInput.equals(usuario.getHashSenha())){
+                        resultado = true;
                     }
                 }
                 case CPF -> {
-                    if(Objects.equals(param, usuario.getCPF())){
-                        return usuario.getHashSenha();
+                    if(loginInput.equals(usuario.getCPF()) && passwordHashInput.equals(usuario.getHashSenha())){
+                        resultado = true;
                     }
                 }
                 default -> {
-                    return "";
+                    return false;
                 }
             }
+            if (resultado) {
+                usuarioLogado = usuario;
+                break;
+            }
         }
-        return "";
+        return resultado;
+    }
+
+    public void retornaLogado() {
+        mainController.validLogin(usuarioLogado);
     }
 }

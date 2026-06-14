@@ -1,6 +1,7 @@
 package guiTests;
 
 import controller.ControllerLogin;
+import controller.MainController;
 import model.Usuario;
 
 import javax.naming.ldap.Control;
@@ -15,8 +16,9 @@ public class GUILogin_Teste {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         usuarios.add(user1);
         usuarios.add(user2);
-        ControllerLogin controllerLogin = new ControllerLogin(usuarios);
-        controllerLogin.inicia();
+        MainController mainController = new MainController();
+        mainController.setUsuariosGerais(usuarios);
+        mainController.uc02_login();
     }
 
 }

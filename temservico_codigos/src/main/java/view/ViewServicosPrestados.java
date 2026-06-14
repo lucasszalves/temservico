@@ -26,10 +26,6 @@ public class ViewServicosPrestados {
     private static final int fieldHeight2 = 25;
     private static final int widthLabels = 300;
 
-    public enum UsersCols {
-        CPF, NAME, EMAIL, PASSWORDHASH
-    }
-
     public static void janelaServicosPrestados(Usuario usuario){
         JFrame frame = new JFrame("Serviços prestados");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

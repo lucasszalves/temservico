@@ -5,10 +5,11 @@ import sec.SHA256Hasher;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.security.NoSuchAlgorithmException;
 
 
-public class ViewLogin {
+public class ViewLogin{
 
     private ControllerLogin controller;
 
@@ -20,12 +21,13 @@ public class ViewLogin {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
+        frame.setLocationRelativeTo(null);
         int width = 400;
         int height = 300;
         Dimension dimension = new Dimension(width, height);
 
         // gera o painel principal de login
-        JPanel panel = loginJPanel(width, height);
+        JPanel panel = loginJPanel(width, height, frame);
 
         panel.setPreferredSize(dimension);
         panel.setMaximumSize(dimension);
@@ -42,7 +44,7 @@ public class ViewLogin {
         frame.setVisible(true);
     }
 
-    private JPanel loginJPanel(int width, int height) {
+    private JPanel loginJPanel(int width, int height, JFrame framePai) {
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
@@ -78,26 +80,30 @@ public class ViewLogin {
 
         loginButton.addActionListener(e -> {
             String loginInput = usrText.getText();
+            String passwordInput = new String(pswrdText.getPassword());
 
-            // checa o tipo do input no primeiro campo (CPF, nome ou email)
-            ViewServicosPrestados.UsersCols loginType = controller.checkLoginInput(loginInput);
-
-            String inputPasswordHash = null;
             try {
-                // faz o hash da senha
-                inputPasswordHash = SHA256Hasher.hashString(new String(pswrdText.getPassword()));
+                if(controller.validLogin(loginInput, passwordInput)){
+                    JOptionPane.showMessageDialog(framePai, "Sucesso! Entrando na plataforma.");
+                    controller.retornaLogado();
+                    framePai.dispose();
+                }
+                else{
+                    messageLabel.setText("Senha incorreta ou usuário não existe.");
+                }
             } catch (NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
-
-            // pega o hash da senha associado à entrada, armazenado na lista e compara com o hash da senha de entrada
-            if(controller.getPasswordHash(loginInput, loginType).equals(inputPasswordHash)){
-                messageLabel.setText("Sucesso! Entrando na plataforma.");
+        });
+        int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
+        InputMap inputMap = panel.getInputMap(condition);
+        ActionMap actionMap = panel.getActionMap();
+        inputMap.put(KeyStroke.getKeyStroke("ENTER"), "enter");
+        actionMap.put("enter", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginButton.doClick();
             }
-            else{
-                messageLabel.setText("Senha incorreta ou usuário não existe.");
-            }
-
         });
 
         return panel;

@@ -147,4 +147,9 @@ public class Usuario {
     public void setHashSenha(String hashSenha) {
         this.hashSenha = hashSenha;
     }
+
+    @Override
+    public String toString() {
+        return this.nome + ", " + this.CPF + ", " + this.email;
+    }
 }
