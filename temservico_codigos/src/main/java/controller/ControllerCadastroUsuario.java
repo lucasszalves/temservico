@@ -20,8 +20,8 @@ public class ControllerCadastroUsuario {
 
     public record RetornoValidaCadastro (boolean valido, String mensagem) implements  Retorno {}
 
-    public RetornoValidaCadastro ValidaCadastro(String nome, String CPF, String email, String senha) throws NoSuchAlgorithmException {
-        String mensagem = "Cadastro bem-sucedido!";
+    public RetornoValidaCadastro ValidaCadastro(String nome, String CPF, String email, String senha, String repetirSenha) throws NoSuchAlgorithmException {
+        String mensagem = "Usuário cadastrado com sucesso!";
         boolean valido = true;
         if(nome.isEmpty()){
             mensagem = "Insira um nome.";
@@ -36,7 +36,11 @@ public class ControllerCadastroUsuario {
             valido = false;
         }
         else if (senha.length() < 8){
-            mensagem = "A senha deve ter mais de 8 caracteres";
+            mensagem = "A senha deve ter mais de 8 caracteres.";
+            valido = false;
+        }
+        else if (!senha.equals(repetirSenha)){
+            mensagem = "As senhas não batem.";
             valido = false;
         }
 

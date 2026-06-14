@@ -19,6 +19,7 @@ public class ViewCadastroUsuario extends JFrame implements View{
     private JTextField txtCpf;
     private JTextField txtEmail;
     private JPasswordField txtSenha;
+    private JPasswordField txtRepetirSenha;
 
 
     public ViewCadastroUsuario(ControllerCadastroUsuario c){
@@ -40,32 +41,32 @@ public class ViewCadastroUsuario extends JFrame implements View{
         lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2; // Faz o título ocupar as duas colunas (labels e textfields)
+        gbc.gridwidth = 2; // Ocupa as duas colunas
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 10, 20, 10); // Espaçamento maior na parte inferior
+        gbc.insets = new Insets(10, 10, 20, 10); // Espaçamento maior embaixo
         painelCadastro.add(lblTitulo, gbc);
 
-// Resetando o gridwidth para os campos de formulário
+// Resetando as configurações de grid para os campos
         gbc.gridwidth = 1;
-        gbc.insets = new Insets(5, 10, 5, 10); // Espaçamento padrão entre as linhas
+        gbc.insets = new Insets(5, 10, 5, 10);
 
 // 2. Campo "Nome"
         JLabel lblNome = new JLabel("Nome:");
-        lblNome.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblNome.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.EAST; // Alinha o texto da label à direita
+        gbc.anchor = GridBagConstraints.EAST;
         painelCadastro.add(lblNome, gbc);
 
         txtNome = new JTextField(20);
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST; // Alinha a caixa de texto à esquerda
+        gbc.anchor = GridBagConstraints.WEST;
         painelCadastro.add(txtNome, gbc);
 
 // 3. Campo "CPF"
         JLabel lblCpf = new JLabel("CPF:");
-        lblCpf.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblCpf.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.EAST;
@@ -79,7 +80,7 @@ public class ViewCadastroUsuario extends JFrame implements View{
 
 // 4. Campo "E-mail"
         JLabel lblEmail = new JLabel("E-mail:");
-        lblEmail.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblEmail.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
@@ -93,47 +94,63 @@ public class ViewCadastroUsuario extends JFrame implements View{
 
 // 5. Campo "Senha"
         JLabel lblSenha = new JLabel("Senha:");
-        lblSenha.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        lblSenha.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
         painelCadastro.add(lblSenha, gbc);
 
-        txtSenha = new JPasswordField(20); // Usando JPasswordField para esconder os caracteres
+        txtSenha = new JPasswordField(20);
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
         painelCadastro.add(txtSenha, gbc);
 
-// 6. Botão "Confirmar"
-        JButton btnConfirmar = new JButton("Confirmar");
-        btnConfirmar.setFont(new Font("SansSerif", Font.BOLD, 16));
-        btnConfirmar.setPreferredSize(new Dimension(150, 40));
+// 6. Campo "Repita a senha" (NOVO)
+        JLabel lblRepetirSenha = new JLabel("Repita a senha:");
+        lblRepetirSenha.setFont(new Font("SansSerif", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 5;
-        gbc.gridwidth = 2; // Ocupa as duas colunas para ficar centralizado
+        gbc.anchor = GridBagConstraints.EAST;
+        painelCadastro.add(lblRepetirSenha, gbc);
+
+        txtRepetirSenha = new JPasswordField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
+        painelCadastro.add(txtRepetirSenha, gbc);
+
+// 7. Botão "Confirmar" (Agora no gridy = 6)
+        JButton btnConfirmar = new JButton("Confirmar");
+        btnConfirmar.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btnConfirmar.setPreferredSize(new Dimension(150, 35));
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2; // Ocupa as duas colunas para centralizar
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(20, 10, 10, 10); // Espaçamento maior na parte superior para separar do formulário
+        gbc.insets = new Insets(20, 10, 10, 10); // Espaçamento maior em cima
         painelCadastro.add(btnConfirmar, gbc);
 
-        // 7. Texto "Já tem uma conta?"
+// 8. Texto "Já tem uma conta?" (Agora no gridy = 7)
         JLabel lblPerguntaConta = new JLabel("Já tem uma conta?");
         lblPerguntaConta.setFont(new Font("SansSerif", Font.PLAIN, 14));
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(10, 10, 5, 10);
         painelCadastro.add(lblPerguntaConta, gbc);
 
-// 8. Botão "Login"
-        JButton btnLogin = new JButton("Login");
-        btnLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
-        btnLogin.setPreferredSize(new Dimension(150, 35));
+// 9. Botão "Login" (Agora no gridy = 8)
+        JButton btnIrParaLogin = new JButton("Login");
+        btnIrParaLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btnIrParaLogin.setPreferredSize(new Dimension(150, 35));
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 10, 10, 10);
-        painelCadastro.add(btnLogin, gbc);
+        painelCadastro.add(btnIrParaLogin, gbc);
+
+        // AÇÕES ABAIXO VVVVVVVVVV
 
         btnConfirmar.addActionListener(e -> {
             Command command = new CadastroUsuarioCommand(this, controller);
@@ -143,14 +160,10 @@ public class ViewCadastroUsuario extends JFrame implements View{
             } catch (NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
-            if(retorno != null && retorno.valido()){
-                JOptionPane.showMessageDialog(this, "Usuário cadastrado com sucesso!");
+            JOptionPane.showMessageDialog(this, retorno.mensagem());
+            if(retorno.valido()){
                 controller.menuEntrar();
                 dispose();
-            }
-            else{
-                assert retorno != null;
-                JOptionPane.showMessageDialog(this, retorno.mensagem());
             }
         });
         int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
@@ -164,7 +177,7 @@ public class ViewCadastroUsuario extends JFrame implements View{
             }
         });
 
-        btnLogin.addActionListener(e -> {
+        btnIrParaLogin.addActionListener(e -> {
             controller.telaLogin();
             dispose();
         });
@@ -180,6 +193,7 @@ public class ViewCadastroUsuario extends JFrame implements View{
         listaRetorno.add(txtCpf.getText().strip());
         listaRetorno.add(txtEmail.getText().strip());
         listaRetorno.add(new String(txtSenha.getPassword()));
+        listaRetorno.add(new String(txtRepetirSenha.getPassword()));
         return listaRetorno;
     }
 }

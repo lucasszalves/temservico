@@ -22,6 +22,7 @@ public class CadastroUsuarioCommand extends Command{
         String CPF = listaInputs.get(1).toString();
         String email = listaInputs.get(2).toString();
         String senha = listaInputs.get(3).toString();
-        return controller.ValidaCadastro(nome, CPF, email, senha);
+        String repetirSenha = listaInputs.get(4).toString();
+        return controller.ValidaCadastro(nome, CPF, email, senha, repetirSenha);
     }
 }

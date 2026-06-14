@@ -15,6 +15,10 @@ public class MainController {
         appendUsuariosGerais(new Usuario("11111111111", "admin@admin.com", "admin", "1234"));
     }
 
+    public void inicia(){
+        menuEntrar();
+    }
+
     public void setUsuariosGerais(ArrayList<Usuario> usuariosGerais) {
         this.usuariosGerais = usuariosGerais;
     }
@@ -44,8 +48,14 @@ public class MainController {
         mainMenu();
     }
 
-    public void mainMenu(){
+    public void logout(){
+        usuarioLogado = null;
+        menuEntrar();
+    }
 
+    public void mainMenu(){
+        ControllerMenuPrincipal controllerMenuPrincipal = new ControllerMenuPrincipal(this, usuarioLogado);
+        controllerMenuPrincipal.inicia();
     }
 
     public void printUsuarios(){
