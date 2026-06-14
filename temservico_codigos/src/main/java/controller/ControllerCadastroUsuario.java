@@ -4,13 +4,16 @@ import model.Usuario;
 import view.ViewCadastroUsuario;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 public class ControllerCadastroUsuario {
     private MainController mainController;
     private ViewCadastroUsuario viewCadastroUsuario;
+    private ArrayList<Usuario> usuariosGerais;
 
-    public ControllerCadastroUsuario(MainController mc){
+    public ControllerCadastroUsuario(MainController mc, ArrayList<Usuario> usuariosGerais){
         mainController = mc;
+        this.usuariosGerais = usuariosGerais;
         viewCadastroUsuario = new ViewCadastroUsuario(this);
     }
 
@@ -43,6 +46,10 @@ public class ControllerCadastroUsuario {
             mensagem = "As senhas não batem.";
             valido = false;
         }
+        else if (usuarioExistente(CPF, email)){
+            mensagem = "CPF ou e-mail já cadastrado";
+            valido = false;
+        }
 
         if(valido){
             cadastraUsuario(nome, CPF, email, senha);
@@ -62,5 +69,16 @@ public class ControllerCadastroUsuario {
 
     public void telaLogin() {
         mainController.uc02_login();
+    }
+
+    public boolean usuarioExistente(String CPF, String email){
+        boolean existe = false;
+        for (Usuario uExistente : usuariosGerais){
+            if(CPF.equals(uExistente.getCPF()) || email.equals(uExistente.getEmail())){
+                existe = true;
+                break;
+            }
+        }
+        return existe;
     }
 }

@@ -21,4 +21,8 @@ public class ControllerMenuPrincipal {
     public void logout() {
         mainController.logout();
     }
+
+    public void detalhes() {
+
+    }
 }

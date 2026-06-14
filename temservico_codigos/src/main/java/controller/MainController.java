@@ -34,7 +34,7 @@ public class MainController {
     }
 
     public void uc01_cadastrarUsuario() {
-        ControllerCadastroUsuario controllerCadastroUsuario = new ControllerCadastroUsuario(this);
+        ControllerCadastroUsuario controllerCadastroUsuario = new ControllerCadastroUsuario(this, usuariosGerais);
         controllerCadastroUsuario.inicia();
     }
 

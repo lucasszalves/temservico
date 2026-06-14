@@ -125,8 +125,10 @@ public class ViewMenuPrincipal extends JFrame {
         gbc.insets = new Insets(10, 20, 20, 10);
         painelHome.add(btnLogout, gbc);
 
+        // AÇÕES ABAIXO
+
         btnDetalhes.addActionListener(e -> {
-            System.out.println("detalhes"); // TODO
+            controller.detalhes();
         });
         btnServicosPrestados.addActionListener(e -> {
             System.out.println("servicos"); // TODO
