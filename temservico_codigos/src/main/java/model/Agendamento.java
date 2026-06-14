@@ -4,14 +4,15 @@ import java.time.LocalDate;
 
 public class Agendamento {
     private int id;
-    private Servico servico;
-    private Usuario contratante;
+    static int idClasse = 0;
+    private int IDservico;
+    private String CPFcontratante;
     private LocalDate data;
 
-    public Agendamento(int id, Servico servico, Usuario contratante, LocalDate data){
-        this.id = id;
-        this.servico = servico;
-        this.contratante = contratante;
+    public Agendamento(Servico servico, Usuario contratante, LocalDate data){
+        this.id = idClasse++;
+        this.IDservico = servico.getId();
+        this.CPFcontratante = contratante.getCPF();
         this.data = data;
     }
 
@@ -19,12 +20,12 @@ public class Agendamento {
         return id;
     }
 
-    public Servico getServico() {
-        return servico;
+    public int getServico() {
+        return IDservico;
     }
 
-    public Usuario getContratante() {
-        return contratante;
+    public String getContratante() {
+        return CPFcontratante;
     }
 
     public LocalDate getData() {

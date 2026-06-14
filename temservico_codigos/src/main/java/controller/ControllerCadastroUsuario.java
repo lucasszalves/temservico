@@ -47,7 +47,7 @@ public class ControllerCadastroUsuario {
             valido = false;
         }
         else if (usuarioExistente(CPF, email)){
-            mensagem = "CPF ou e-mail já cadastrado";
+            mensagem = "CPF ou e-mail já cadastrado.";
             valido = false;
         }
 

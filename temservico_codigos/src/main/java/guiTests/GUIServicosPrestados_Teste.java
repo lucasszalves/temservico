@@ -20,7 +20,7 @@ public class GUIServicosPrestados_Teste {
         servicos.add(new Servico(TipoServico.ELETRICA, 100, new ArrayList<LocalDate>(), cidades, user1));
         Servico servico1 = new Servico(TipoServico.ENCANAMENTO, 250, new ArrayList<LocalDate>(), cidades, user1);
         ArrayList<Agendamento> agendamentos = new ArrayList<>();
-        agendamentos.add(new Agendamento(0, servico1, user2, LocalDate.of(2026, 5, 18)));
+        agendamentos.add(new Agendamento(servico1, user2, LocalDate.of(2026, 5, 18)));
         servico1.setAgendamentos(agendamentos);
         servicos.add(servico1);
         user1.setServicosPrestados(servicos);

@@ -14,22 +14,20 @@ public class Servico {
     private double notaMedia;
     private double preco;
     private TipoServico tipo;
-    private Usuario prestador;
+    private String CPFprestador;
 
     public Servico(TipoServico tipo, double preco, ArrayList<LocalDate> datasIndisponiveis, ArrayList<String> cidades, Usuario prestador){
-        this.id = idClasse;
+        this.id = idClasse++;
         this.tipo = tipo;
         this.preco = preco;
         this.datasIndisponiveis = datasIndisponiveis;
         this.cidades = cidades;
-        this.prestador = prestador;
+        this.CPFprestador = prestador.getCPF();
         this.notaMedia = 0;
-
-        idClasse++;
     }
 
-    public Usuario getPrestador() {
-        return prestador;
+    public String getPrestador() {
+        return CPFprestador;
     }
 
     public TipoServico getTipo() {
@@ -106,6 +104,6 @@ public class Servico {
 
     @Override
     public String toString(){
-        return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.prestador.getNome();
+        return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.CPFprestador;
     }
 }

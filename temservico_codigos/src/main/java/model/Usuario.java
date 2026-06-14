@@ -18,7 +18,7 @@ public class Usuario {
     private ArrayList<Integer> idsServicosFavoritos;
     private ArrayList<Certificado> certificados;
     private ArrayList<Servico> servicosPrestados;
-    private ArrayList<Agendamento> agendamentos;
+    private ArrayList<Agendamento> agendamentosContratados;
 
     public Usuario(String CPF, String email, String nome){
         this.CPF = CPF;
@@ -77,8 +77,8 @@ public class Usuario {
         return certificados;
     }
 
-    public ArrayList<Agendamento> getAgendamentos() {
-        return agendamentos;
+    public ArrayList<Agendamento> getAgendamentosContratados() {
+        return agendamentosContratados;
     }
 
     public void setDatasIndisponiveis(ArrayList<LocalDate> datasIndisponiveis) {
@@ -101,8 +101,8 @@ public class Usuario {
         this.servicosPrestados = servicosPrestados;
     }
 
-    public void setAgendamentos(ArrayList<Agendamento> agendamentos) {
-        this.agendamentos = agendamentos;
+    public void setAgendamentosContratados(ArrayList<Agendamento> agendamentosContratados) {
+        this.agendamentosContratados = agendamentosContratados;
     }
 
     public void addServicosPrestados(Servico servico){
