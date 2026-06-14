@@ -39,8 +39,13 @@ public class MainController {
         controllerLogin.inicia();
     }
 
-    public void validLogin(Usuario usuarioLogadoInput) {
+    public void loginSuccess(Usuario usuarioLogadoInput) {
         usuarioLogado = usuarioLogadoInput;
+        mainMenu();
+    }
+
+    public void mainMenu(){
+
     }
 
     public void printUsuarios(){

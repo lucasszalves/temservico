@@ -55,4 +55,8 @@ public class ControllerCadastroUsuario {
     public void menuEntrar(){
         mainController.menuEntrar();
     }
+
+    public void telaLogin() {
+        mainController.uc02_login();
+    }
 }

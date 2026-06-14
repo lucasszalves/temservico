@@ -3,11 +3,9 @@ package controller;
 import model.Usuario;
 import sec.SHA256Hasher;
 import view.ViewLogin;
-import view.ViewServicosPrestados;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class ControllerLogin {
     private ArrayList<Usuario> usuariosGerais;
@@ -68,7 +66,11 @@ public class ControllerLogin {
         return resultado;
     }
 
-    public void retornaLogado() {
-        mainController.validLogin(usuarioLogado);
+    public void loginSuccess() {
+        mainController.loginSuccess(usuarioLogado);
+    }
+
+    public void telaCadastro(){
+        mainController.uc01_cadastrarUsuario();
     }
 }

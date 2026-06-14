@@ -1,12 +1,12 @@
 package view;
 
 import controller.ControllerLogin;
-import sec.SHA256Hasher;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 
 public class ViewLogin{
@@ -22,90 +22,127 @@ public class ViewLogin{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setLocationRelativeTo(null);
-        int width = 400;
-        int height = 300;
-        Dimension dimension = new Dimension(width, height);
+        frame.setLayout(new BorderLayout());
 
         // gera o painel principal de login
-        JPanel panel = loginJPanel(width, height, frame);
+        JPanel panel = loginJPanel(frame);
 
-        panel.setPreferredSize(dimension);
-        panel.setMaximumSize(dimension);
-        panel.setMinimumSize(dimension);
-
-        Box box = new Box(BoxLayout.Y_AXIS);
-
-        box.add(Box.createVerticalGlue());
-        box.add(panel);
-        box.add(Box.createVerticalGlue());
-
-        frame.add(box);
+        frame.add(panel);
 
         frame.setVisible(true);
     }
 
-    private JPanel loginJPanel(int width, int height, JFrame framePai) {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
+    private JPanel loginJPanel(JFrame framePai) {
+        JPanel painelLogin = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        int fieldHeight = 25;
+// 1. Título "TemServiço?"
+        JLabel lblTitulo = new JLabel("TemServiço?");
+        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 28));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE; // Mantém o título no tamanho normal
+        gbc.insets = new Insets(10, 10, 30, 10);
+        painelLogin.add(lblTitulo, gbc);
 
-        JLabel title = new JLabel("TemServiço?", SwingConstants.CENTER);
-        title.setBounds(width/2 - 80, 10, 160, fieldHeight + 10);
-        title.setFont(title.getFont().deriveFont(20.0f));
-        panel.add(title);
+// Resetando as configurações de grid para o formulário
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(5, 10, 5, 10);
 
-        JLabel usrLabel = new JLabel("CPF/Nome/Email:");
-        usrLabel.setBounds(width/2 - 125, 55, 110, fieldHeight);
-        panel.add(usrLabel);
-        JTextField usrText = new JTextField(20);
-        usrText.setBounds(width/2 - 125 + 110, 55, 140, fieldHeight);
-        panel.add(usrText);
+// 2. Campo "CPF/Nome/Email"
+        JLabel lblIdentificacao = new JLabel("CPF/Nome/Email:");
+        lblIdentificacao.setFont(new Font("SansSerif", Font.BOLD, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        painelLogin.add(lblIdentificacao, gbc);
 
-        JLabel pswrdLabel = new JLabel("Senha:");
-        pswrdLabel.setBounds(width/2 - 125, 55 + fieldHeight, 110, fieldHeight);
-        panel.add(pswrdLabel);
+        JTextField txtIdentificacao = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        painelLogin.add(txtIdentificacao, gbc);
 
-        JPasswordField pswrdText = new JPasswordField(20);
-        pswrdText.setBounds(width/2 - 125 + 110, 55 + fieldHeight, 140, fieldHeight);
-        panel.add(pswrdText);
+// 3. Campo "Senha"
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setFont(new Font("SansSerif", Font.BOLD, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        painelLogin.add(lblSenha, gbc);
 
-        JButton loginButton = new JButton("Login");
-        loginButton.setBounds(width/2 - 50, 75 + fieldHeight * 2, 100, fieldHeight);
-        panel.add(loginButton);
+        JPasswordField txtSenha = new JPasswordField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        painelLogin.add(txtSenha, gbc);
 
-        JLabel messageLabel = new JLabel("", SwingConstants.CENTER);
-        messageLabel.setBounds(width/2 - 150, 80 + fieldHeight * 3, 300, fieldHeight);
-        panel.add(messageLabel);
+// 4. Botão "Login"
+        JButton btnLogin = new JButton("Login");
+        btnLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btnLogin.setPreferredSize(new Dimension(150, 35));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(25, 10, 15, 10);
+        painelLogin.add(btnLogin, gbc);
 
-        loginButton.addActionListener(e -> {
-            String loginInput = usrText.getText();
-            String passwordInput = new String(pswrdText.getPassword());
+// 5. Texto "Ainda não possui uma conta?"
+        JLabel lblPergunta = new JLabel("Ainda não possui uma conta?");
+        lblPergunta.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(10, 10, 5, 10);
+        painelLogin.add(lblPergunta, gbc);
+
+// 6. Botão "Cadastre-se!"
+        JButton btnCadastrar = new JButton("Cadastre-se!");
+        btnCadastrar.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btnCadastrar.setPreferredSize(new Dimension(180, 35));
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 10, 10, 10);
+        painelLogin.add(btnCadastrar, gbc);
+
+        btnLogin.addActionListener(e -> {
+            String loginInput = txtIdentificacao.getText();
+            String passwordInput = new String(txtSenha.getPassword());
 
             try {
                 if(controller.validLogin(loginInput, passwordInput)){
                     JOptionPane.showMessageDialog(framePai, "Sucesso! Entrando na plataforma.");
-                    controller.retornaLogado();
+                    controller.loginSuccess();
                     framePai.dispose();
                 }
                 else{
-                    messageLabel.setText("Senha incorreta ou usuário não existe.");
+                    JOptionPane.showMessageDialog(framePai, "Senha incorreta ou usuário não existe.");
                 }
             } catch (NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
         });
         int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
-        InputMap inputMap = panel.getInputMap(condition);
-        ActionMap actionMap = panel.getActionMap();
+        InputMap inputMap = painelLogin.getInputMap(condition);
+        ActionMap actionMap = painelLogin.getActionMap();
         inputMap.put(KeyStroke.getKeyStroke("ENTER"), "enter");
         actionMap.put("enter", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loginButton.doClick();
+                btnLogin.doClick();
             }
         });
 
-        return panel;
+        btnCadastrar.addActionListener(e -> {
+            controller.telaCadastro();
+            framePai.dispose();
+        });
+
+        return painelLogin;
     }
+
 }

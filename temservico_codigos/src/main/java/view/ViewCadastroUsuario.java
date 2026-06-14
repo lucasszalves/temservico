@@ -115,6 +115,26 @@ public class ViewCadastroUsuario extends JFrame implements View{
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(20, 10, 10, 10); // Espaçamento maior na parte superior para separar do formulário
         painelCadastro.add(btnConfirmar, gbc);
+
+        // 7. Texto "Já tem uma conta?"
+        JLabel lblPerguntaConta = new JLabel("Já tem uma conta?");
+        lblPerguntaConta.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(10, 10, 5, 10);
+        painelCadastro.add(lblPerguntaConta, gbc);
+
+// 8. Botão "Login"
+        JButton btnLogin = new JButton("Login");
+        btnLogin.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btnLogin.setPreferredSize(new Dimension(150, 35));
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 10, 10, 10);
+        painelCadastro.add(btnLogin, gbc);
+
         btnConfirmar.addActionListener(e -> {
             Command command = new CadastroUsuarioCommand(this, controller);
             RetornoValidaCadastro retorno;
@@ -142,6 +162,11 @@ public class ViewCadastroUsuario extends JFrame implements View{
             public void actionPerformed(ActionEvent e) {
                 btnConfirmar.doClick();
             }
+        });
+
+        btnLogin.addActionListener(e -> {
+            controller.telaLogin();
+            dispose();
         });
 
         add(painelCadastro);
