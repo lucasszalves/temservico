@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GUIServicosPrestados_Teste {
     public static void main(String[] args) throws NoSuchAlgorithmException {
         MainController mc = new MainController();
-        Usuario user1 = new Usuario("12631096916", "souzaalves.lucas.2017@gmail.com", "Lucas");
+        Usuario user1 = new Usuario("12631096916", "souzaalves.lucas.2017@gmail.com", "Lucas", "banana");
         Usuario user2 = new Usuario("12312312311", "admin@admin.com", "admin", "1234");
 
 
@@ -35,6 +35,7 @@ public class GUIServicosPrestados_Teste {
         mc.addAgendamentosGerais(agendamento);
         mc.setUsuarioLogado(user1);
 //        mc.excluiUsuario(user1.getCPF());
-        mc.uc03_CRUDServicosPrestados();
+        mc.inicia();
+        mc.printaTudo();
     }
 }

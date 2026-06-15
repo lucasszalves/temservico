@@ -17,4 +17,13 @@ public class ControllerReadUpdtDelUsuario {
     public void inicia() {
         view.janelaDetalhes();
     }
+
+    public void editarUsuario() {
+
+//        mainController.editaUsuario(usuarioLogado.getCPF(), configs);
+    }
+
+    public void excluiUsuario() {
+        mainController.excluiUsuario(usuarioLogado.getCPF());
+    }
 }

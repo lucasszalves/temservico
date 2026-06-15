@@ -140,6 +140,23 @@ public class MainController {
         return agendamentos;
     }
 
+    public void editaUsuario(String CPF, EditorUsuarioConfigs configs) throws NoSuchAlgorithmException {
+        for(Usuario u : this.usuariosGerais){
+            if(u.getCPF().equals(CPF)){
+                if(configs.isEditaNome()){
+                    u.setNome(configs.getNovoNome());
+                }
+                if(configs.isEditaEmail()){
+                    u.setEmail(configs.getNovoEmail());
+                }
+                if(configs.isEditaSenha()){
+                    u.changeSenha(configs.getNovaSenha());
+                }
+                return;
+            }
+        }
+    }
+
     public void editaServico(int id, EditorServicoConfigs configs){
         for(Servico servico : this.servicosGerais){
             if (servico.getId() == id){
@@ -166,6 +183,7 @@ public class MainController {
                 excluiAgendamentosDeServicoContratado(usuariosGerais.get(i));
                 excluiServicosPrestados(usuariosGerais.get(i));
                 usuariosGerais.remove(i);
+                printaTudo();
                 return;
             }
         }
@@ -183,7 +201,7 @@ public class MainController {
     public void excluiServicosPrestados(Usuario usuario){
         for (int i = servicosGerais.size() - 1; i >= 0; i--) {
             if(servicosGerais.get(i).getCPFprestador().equals(usuario.getCPF())){
-                System.out.println(servicosGerais.get(i));
+//                System.out.println(servicosGerais.get(i));
                 excluiAgendamentosDoServico(servicosGerais.get(i));
                 servicosGerais.remove(i);
             }

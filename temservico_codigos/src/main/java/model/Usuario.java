@@ -26,6 +26,7 @@ public class Usuario {
         this.CPF = CPF;
         this.email = email;
         this.nome = nome;
+        this.datasIndisponiveis = new ArrayList<>();
     }
 
     public Usuario(String CPF, String email, String nome, String senha) throws NoSuchAlgorithmException {
@@ -33,6 +34,7 @@ public class Usuario {
         this.email = email;
         this.nome = nome;
         this.hashSenha = SHA256Hasher.hashString(senha);
+        this.datasIndisponiveis = new ArrayList<>();
     }
 
     public int getId() {
@@ -68,7 +70,7 @@ public class Usuario {
 //    }
 
     public ArrayList<LocalDate> getDatasIndisponiveis() {
-        return datasIndisponiveis;
+        return this.datasIndisponiveis;
     }
 
 //    public ArrayList<Integer> getIdsServicosContratados() {
@@ -86,6 +88,10 @@ public class Usuario {
 //    public ArrayList<Integer> getIdsAgendamentosContratados() {
 //        return idsAgendamentosContratados;
 //    }
+
+    public void addDatasIndisponiveis(LocalDate data){
+        this.datasIndisponiveis.add(data);
+    }
 
     public void setDatasIndisponiveis(ArrayList<LocalDate> datasIndisponiveis) {
         this.datasIndisponiveis = datasIndisponiveis;
@@ -123,8 +129,13 @@ public class Usuario {
         this.hashSenha = hashSenha;
     }
 
+    public void changeSenha(String novaSenha) throws NoSuchAlgorithmException {
+        this.hashSenha = SHA256Hasher.hashString(novaSenha);
+    }
+
     @Override
     public String toString() {
         return this.nome + ", " + this.CPF + ", " + this.email;
     }
+
 }
