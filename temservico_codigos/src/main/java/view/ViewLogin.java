@@ -110,7 +110,7 @@ public class ViewLogin{
         painelLogin.add(btnCadastrar, gbc);
 
         btnLogin.addActionListener(e -> {
-            String loginInput = txtIdentificacao.getText();
+            String loginInput = txtIdentificacao.getText().strip();
             String passwordInput = new String(txtSenha.getPassword());
 
             try {

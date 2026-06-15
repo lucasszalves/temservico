@@ -20,8 +20,8 @@ public class GUIServicosPrestados_Teste {
 
         ArrayList<String> cidades = new ArrayList<>();
         cidades.add("Florianopolis");
-        Servico servico1 = new Servico(TipoServico.ENCANAMENTO, 250, new ArrayList<LocalDate>(), cidades, user1);
-        Servico servico2 = new Servico(TipoServico.ELETRICA, 100, new ArrayList<LocalDate>(), cidades, user1);
+        Servico servico1 = new Servico(TipoServico.ENCANAMENTO, 250, new ArrayList<>(), cidades, user1);
+        Servico servico2 = new Servico(TipoServico.ELETRICA, 100, new ArrayList<>(), cidades, user1);
 //
         Agendamento agendamento = new Agendamento(servico1, user2, LocalDate.of(2026, 5, 18));
 //        servico1.addAgendamento(agendamento);
@@ -35,7 +35,7 @@ public class GUIServicosPrestados_Teste {
         mc.addAgendamentosGerais(agendamento);
         mc.setUsuarioLogado(user1);
 //        mc.excluiUsuario(user1.getCPF());
-        mc.inicia();
+        mc.mainMenu();
         mc.printaTudo();
     }
 }

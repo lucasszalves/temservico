@@ -1,6 +1,6 @@
 package command;
 
-import controller.Retorno;
+import controller.RetornoValidaMsg;
 import view.View;
 
 import java.security.NoSuchAlgorithmException;
@@ -12,5 +12,5 @@ public abstract class Command {
         this.view = view;
     }
 
-    public abstract Retorno execute() throws NoSuchAlgorithmException;
+    public abstract RetornoValidaMsg execute() throws NoSuchAlgorithmException;
 }

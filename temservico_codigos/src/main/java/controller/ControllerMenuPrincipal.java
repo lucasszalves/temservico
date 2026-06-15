@@ -29,4 +29,8 @@ public class ControllerMenuPrincipal {
     public void servicosPrestados() {
         mainController.uc03_CRUDServicosPrestados();
     }
+
+    public void fecha() {
+        view.dispose();
+    }
 }

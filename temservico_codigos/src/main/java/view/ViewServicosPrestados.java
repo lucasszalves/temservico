@@ -406,7 +406,7 @@ public class ViewServicosPrestados {
         SaidaValidadaValoresServico saida = new SaidaValidadaValoresServico();
 
         if(validaCidades) {
-            if (cidadesInput.isEmpty()) {
+            if (cidadesInput.isBlank()) {
                 JOptionPane.showMessageDialog(null, "Insira pelo menos uma cidade.");
                 saida.setValido(false);
                 return saida;
@@ -417,7 +417,7 @@ public class ViewServicosPrestados {
 
         if(validaDatas) {
             ArrayList<LocalDate> datasIndisponiveis = new ArrayList<>();
-            if (!datasInput.isEmpty()) {
+            if (!datasInput.isBlank()) {
                 String[] datasStrings = datasInput.split(",");
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 try {

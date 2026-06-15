@@ -21,12 +21,10 @@ public class ControllerCadastroUsuario {
         viewCadastroUsuario.janelaCadastroUsuario();
     }
 
-    public record RetornoValidaCadastro (boolean valido, String mensagem) implements  Retorno {}
-
-    public RetornoValidaCadastro ValidaCadastro(String nome, String CPF, String email, String senha, String repetirSenha) throws NoSuchAlgorithmException {
+    public RetornoValidaMsg ValidaCadastro(String nome, String CPF, String email, String senha, String repetirSenha) throws NoSuchAlgorithmException {
         String mensagem = "Usuário cadastrado com sucesso!";
         boolean valido = true;
-        if(nome.isEmpty()){
+        if(nome.isBlank()){
             mensagem = "Insira um nome.";
             valido = false;
         }
@@ -39,7 +37,7 @@ public class ControllerCadastroUsuario {
             valido = false;
         }
         else if (senha.length() < 8){
-            mensagem = "A senha deve ter mais de 8 caracteres.";
+            mensagem = "A senha deve ter 8 caracteres ou mais.";
             valido = false;
         }
         else if (!senha.equals(repetirSenha)){
@@ -55,7 +53,7 @@ public class ControllerCadastroUsuario {
             cadastraUsuario(nome, CPF, email, senha);
         }
 
-        return new RetornoValidaCadastro(valido, mensagem);
+        return new RetornoValidaMsg(valido, mensagem);
     }
 
     public void cadastraUsuario(String nome, String CPF, String email, String senha) throws NoSuchAlgorithmException {

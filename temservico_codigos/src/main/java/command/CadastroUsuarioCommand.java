@@ -1,7 +1,7 @@
 package command;
 
 import controller.ControllerCadastroUsuario;
-import controller.ControllerCadastroUsuario.RetornoValidaCadastro;
+import controller.RetornoValidaMsg;
 import view.ViewCadastroUsuario;
 
 import java.security.NoSuchAlgorithmException;
@@ -16,7 +16,7 @@ public class CadastroUsuarioCommand extends Command{
     }
 
     @Override
-    public RetornoValidaCadastro execute() throws NoSuchAlgorithmException {
+    public RetornoValidaMsg execute() throws NoSuchAlgorithmException {
         List<Object> listaInputs = view.retornaInputs();
         String nome = listaInputs.getFirst().toString();
         String CPF = listaInputs.get(1).toString();

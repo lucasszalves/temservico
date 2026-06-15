@@ -13,6 +13,7 @@ public class MainController {
     private ArrayList<Usuario> usuariosGerais;
     private ArrayList<Servico> servicosGerais;
     private ArrayList<Agendamento> agendamentosGerais;
+    private ControllerMenuPrincipal controllerMenuPrincipal;
     private Usuario usuarioLogado;
 
     public MainController() throws NoSuchAlgorithmException {
@@ -55,7 +56,7 @@ public class MainController {
     }
 
     public void uc01_ReadUpdtDelUsuario() {
-        ControllerReadUpdtDelUsuario controllerRUDUsuario = new ControllerReadUpdtDelUsuario(this, usuarioLogado);
+        ControllerReadUpdtDelUsuario controllerRUDUsuario = new ControllerReadUpdtDelUsuario(this, usuarioLogado, this.controllerMenuPrincipal);
         controllerRUDUsuario.inicia();
     }
 
@@ -81,8 +82,8 @@ public class MainController {
     }
 
     public void mainMenu(){
-        ControllerMenuPrincipal controllerMenuPrincipal = new ControllerMenuPrincipal(this, usuarioLogado);
-        controllerMenuPrincipal.inicia();
+        this.controllerMenuPrincipal = new ControllerMenuPrincipal(this, usuarioLogado);
+        this.controllerMenuPrincipal.inicia();
     }
 
     public void printUsuarios(){
@@ -152,6 +153,7 @@ public class MainController {
                 if(configs.isEditaSenha()){
                     u.changeSenha(configs.getNovaSenha());
                 }
+                printUsuarios();
                 return;
             }
         }

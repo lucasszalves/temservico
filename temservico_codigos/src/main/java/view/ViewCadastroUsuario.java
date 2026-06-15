@@ -3,8 +3,8 @@ package view;
 import command.CadastroUsuarioCommand;
 import command.Command;
 import controller.ControllerCadastroUsuario;
-import controller.ControllerCadastroUsuario.RetornoValidaCadastro;
 import controller.MainController;
+import controller.RetornoValidaMsg;
 
 import javax.swing.*;
 import java.awt.*;
@@ -154,9 +154,9 @@ public class ViewCadastroUsuario extends JFrame implements View{
 
         btnConfirmar.addActionListener(e -> {
             Command command = new CadastroUsuarioCommand(this, controller);
-            RetornoValidaCadastro retorno;
+            RetornoValidaMsg retorno;
             try {
-                retorno = (RetornoValidaCadastro) command.execute();
+                retorno = command.execute();
             } catch (NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
             }
