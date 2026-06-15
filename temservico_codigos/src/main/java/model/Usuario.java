@@ -8,19 +8,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Usuario {
-
+    static int idClasse = 0;
+    private int id;
     private String CPF;
     private String email;
     private String nome;
     private String hashSenha;
     private ArrayList<LocalDate> datasIndisponiveis;
-    private ArrayList<Integer> idsServicosContratados;
-    private ArrayList<Integer> idsServicosFavoritos;
+//    private ArrayList<Integer> idsServicosPrestados;
+//    private ArrayList<Integer> idsServicosContratados;
+//    private ArrayList<Integer> idsAgendamentosContratados;
     private ArrayList<Certificado> certificados;
-    private ArrayList<Servico> servicosPrestados;
-    private ArrayList<Agendamento> agendamentosContratados;
+    private ArrayList<Integer> idsServicosFavoritos;
 
     public Usuario(String CPF, String email, String nome){
+        this.id = idClasse++;
         this.CPF = CPF;
         this.email = email;
         this.nome = nome;
@@ -31,6 +33,10 @@ public class Usuario {
         this.email = email;
         this.nome = nome;
         this.hashSenha = SHA256Hasher.hashString(senha);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getCPF() {
@@ -57,17 +63,17 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public ArrayList<Servico> getServicosPrestados() {
-        return servicosPrestados;
-    }
+//    public ArrayList<Integer> getIdsServicosPrestados() {
+//        return idsServicosPrestados;
+//    }
 
     public ArrayList<LocalDate> getDatasIndisponiveis() {
         return datasIndisponiveis;
     }
 
-    public ArrayList<Integer> getIdsServicosContratados() {
-        return idsServicosContratados;
-    }
+//    public ArrayList<Integer> getIdsServicosContratados() {
+//        return idsServicosContratados;
+//    }
 
     public ArrayList<Integer> getIdsServicosFavoritos() {
         return idsServicosFavoritos;
@@ -77,17 +83,17 @@ public class Usuario {
         return certificados;
     }
 
-    public ArrayList<Agendamento> getAgendamentosContratados() {
-        return agendamentosContratados;
-    }
+//    public ArrayList<Integer> getIdsAgendamentosContratados() {
+//        return idsAgendamentosContratados;
+//    }
 
     public void setDatasIndisponiveis(ArrayList<LocalDate> datasIndisponiveis) {
         this.datasIndisponiveis = datasIndisponiveis;
     }
 
-    public void setIdsServicosContratados(ArrayList<Integer> idsServicosContratados) {
-        this.idsServicosContratados = idsServicosContratados;
-    }
+//    public void setIdsServicosContratados(ArrayList<Integer> idsServicosContratados) {
+//        this.idsServicosContratados = idsServicosContratados;
+//    }
 
     public void setIdsServicosFavoritos(ArrayList<Integer> idsServicosFavoritos) {
         this.idsServicosFavoritos = idsServicosFavoritos;
@@ -97,48 +103,17 @@ public class Usuario {
         this.certificados = certificados;
     }
 
-    public void setServicosPrestados(ArrayList<Servico> servicosPrestados) {
-        this.servicosPrestados = servicosPrestados;
-    }
+//    public void setIdsServicosPrestados(ArrayList<Integer> idsServicosPrestados) {
+//        this.idsServicosPrestados = idsServicosPrestados;
+//    }
 
-    public void setAgendamentosContratados(ArrayList<Agendamento> agendamentosContratados) {
-        this.agendamentosContratados = agendamentosContratados;
-    }
+//    public void setIdsAgendamentosContratados(ArrayList<Integer> idsAgendamentosContratados) {
+//        this.idsAgendamentosContratados = idsAgendamentosContratados;
+//    }
 
-    public void addServicosPrestados(Servico servico){
-        ArrayList<Servico> servicos = getServicosPrestados();
-        servicos.add(servico);
-        this.setServicosPrestados(servicos);
-    }
-
-    public void editaServico(int id, EditorServicoConfigs configs){
-        for(Servico servico : this.servicosPrestados){
-            if (servico.getId() == id){
-                if (configs.isEditaCidades()){
-                    servico.setCidades(configs.getNovasCidades());
-                }
-                if (configs.isEditaDatasIndisp()){
-                    servico.setDatasIndisponiveis(configs.getNovasDatasIndisp());
-                }
-                if (configs.isEditaPreco()){
-                    servico.setPreco(configs.getNovoPreco());
-                }
-                if (configs.isEditaTipo()){
-                    servico.setTipo(configs.getNovoTipo());
-                }
-                return;
-            }
-        }
-    }
-
-    public void excluiServico(int id){
-        for(Servico servico : this.servicosPrestados){
-            if (servico.getId() == id){
-                this.servicosPrestados.remove(servico);
-                return;
-            }
-        }
-    }
+//    public void addIdServicosPrestados(Servico servico){
+//        idsServicosPrestados.add(servico.getId());
+//    }
 
     public String getHashSenha() {
         return hashSenha;

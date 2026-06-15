@@ -60,7 +60,7 @@ public class ControllerCadastroUsuario {
 
     public void cadastraUsuario(String nome, String CPF, String email, String senha) throws NoSuchAlgorithmException {
         Usuario novoUsuario = new Usuario(CPF, email, nome, senha);
-        mainController.appendUsuariosGerais(novoUsuario);
+        mainController.addUsuariosGerais(novoUsuario);
     }
 
     public void menuEntrar(){

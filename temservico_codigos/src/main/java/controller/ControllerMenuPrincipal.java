@@ -25,4 +25,8 @@ public class ControllerMenuPrincipal {
     public void detalhes() {
 
     }
+
+    public void servicosPrestados() {
+        mainController.uc03_CRUDServicosPrestados();
+    }
 }

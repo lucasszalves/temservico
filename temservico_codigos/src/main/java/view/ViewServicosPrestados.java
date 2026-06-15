@@ -1,6 +1,8 @@
 package view;
 
+import com.sun.tools.javac.Main;
 import controller.EditorServicoConfigs;
+import controller.MainController;
 import model.Servico;
 import model.TipoServico;
 import model.Usuario;
@@ -18,17 +20,24 @@ import java.util.Arrays;
 
 public class ViewServicosPrestados {
 
-    private static Servico servicoSelecionado;
-    private static ArrayList<Usuario> usuariosGerais;
+    private Servico servicoSelecionado;
     private static final int leftMargin = 30;
     private static final int supMargin = 100;
     private static final int fieldHeight = 30;
     private static final int fieldHeight2 = 25;
     private static final int widthLabels = 300;
+    private MainController mainController;
+    private Usuario usuario;
 
-    public static void janelaServicosPrestados(Usuario usuario){
+    public ViewServicosPrestados(MainController mc, Usuario u){
+        this.mainController = mc;
+        this.usuario = u;
+    }
+
+    public void janelaServicosPrestados(){
+        mainController.printaTudo();
         JFrame frame = new JFrame("Serviços prestados");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setLocationRelativeTo(null);
         int width = 400;
@@ -52,7 +61,7 @@ public class ViewServicosPrestados {
         frame.setVisible(true);
     }
 
-    private static JPanel servicosJPanel(int width, int height, Usuario usuario, JFrame framePai) {
+    private JPanel servicosJPanel(int width, int height, Usuario usuario, JFrame framePai) {
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
@@ -67,7 +76,7 @@ public class ViewServicosPrestados {
         panel.add(nomeUserLabel);
 
         // gera tabela de servicos do usuário
-        ArrayList<Servico> servicos = usuario.getServicosPrestados();
+        ArrayList<Servico> servicos = mainController.getServicosPrestados(usuario.getCPF());
 
         String[] colunas = {"ID", "Tipo", "Preço", "Nota média", "Nº de agendamentos"};
         Object[][] dados = new Object[servicos.size()][5];
@@ -112,7 +121,7 @@ public class ViewServicosPrestados {
                 int linhaSelecionada = tabela.getSelectedRow();
 
                 if (linhaSelecionada != -1) {
-                    Servico servico = usuario.getServicosPrestados().get(linhaSelecionada);
+                    Servico servico = servicos.get(linhaSelecionada);
 
                     editarButton.setEnabled(true);
                     excluirButton.setEnabled(true);
@@ -129,7 +138,7 @@ public class ViewServicosPrestados {
 
         // selecionou um serviço e clicou no botão de editar
         editarButton.addActionListener(e -> {
-            janelaEditaServico(servicoSelecionado, usuario, framePai);
+            janelaEditaServico(servicoSelecionado, framePai);
         });
 
         // selecionou um serviço e clicou no botão de excluir
@@ -140,7 +149,7 @@ public class ViewServicosPrestados {
         return panel;
     }
 
-    private static void janelaNovoServico(Usuario usuario, JFrame framePai) {
+    private void janelaNovoServico(Usuario usuario, JFrame framePai) {
         JFrame frame = new JFrame("Novo serviço");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         int width = 500;
@@ -200,7 +209,6 @@ public class ViewServicosPrestados {
         frame.add(novoServicoButton);
 
         novoServicoButton.addActionListener(e -> {
-
             // coleta inputs
             String cidadesInput = cidadesText.getText().strip();
             String datasInput = datasText.getText().strip();
@@ -212,10 +220,10 @@ public class ViewServicosPrestados {
             // e atualiza tabela
             if(saida.isValido()) {
                 Servico novoServico = new Servico(tipoServico, precoInput, saida.getDatas(), saida.getCidades(), usuario);
-                usuario.addServicosPrestados(novoServico);
+                mainController.addServicosGerais(novoServico);
                 JOptionPane.showMessageDialog(null, "Serviço criado com sucesso!");
                 framePai.dispose();
-                janelaServicosPrestados(usuario);
+                janelaServicosPrestados();
                 frame.dispose();
             }
         });
@@ -223,7 +231,7 @@ public class ViewServicosPrestados {
         frame.setVisible(true);
     }
 
-    private static void janelaEditaServico(Servico servicoSelecionado, Usuario prestador, JFrame framePai) {
+    private void janelaEditaServico(Servico servicoSelecionado, JFrame framePai) {
         boolean haAgendamentos = haAgendamentosParaServico(servicoSelecionado);
 
         if(!haAgendamentos) {
@@ -262,7 +270,7 @@ public class ViewServicosPrestados {
             notaMediaLabel.setBounds(leftMargin, supMargin + fieldHeight * 5, widthLabels, fieldHeight);
             frame.add(notaMediaLabel);
 
-            JLabel nomePrestadorLabel = new JLabel("Nome do prestador: " + prestador.getNome());
+            JLabel nomePrestadorLabel = new JLabel("Nome do prestador: " + usuario.getNome());
             nomePrestadorLabel.setBounds(leftMargin, supMargin + fieldHeight * 6, widthLabels, fieldHeight);
             frame.add(nomePrestadorLabel);
 
@@ -363,10 +371,10 @@ public class ViewServicosPrestados {
                     if (configs.isEditaDatasIndisp()) {
                         configs.setNovasDatasIndisp(saida.getDatas());
                     }
-                    prestador.editaServico(servicoSelecionado.getId(), configs);
+                    mainController.editaServico(servicoSelecionado.getId(), configs);
                     JOptionPane.showMessageDialog(null, "Serviço editado com sucesso!");
                     framePai.dispose();
-                    janelaServicosPrestados(prestador);
+                    janelaServicosPrestados();
                     frame.dispose();
                 }
             });
@@ -378,7 +386,7 @@ public class ViewServicosPrestados {
         }
     }
 
-    private static void janelaExcluiServico(Servico servicoSelecionado, Usuario usuario, JFrame framePai) {
+    private void janelaExcluiServico(Servico servicoSelecionado, Usuario usuario, JFrame framePai) {
         int resposta = JOptionPane.showConfirmDialog(
                 framePai,
                 "Deseja realmente excluir o serviço?",
@@ -388,13 +396,13 @@ public class ViewServicosPrestados {
         );
 
         if (resposta == JOptionPane.OK_OPTION) {
-            usuario.excluiServico(servicoSelecionado.getId());
+            mainController.excluiServico(servicoSelecionado.getId());
             framePai.dispose();
-            janelaServicosPrestados(usuario);
+            janelaServicosPrestados();
         }
     }
 
-    private static SaidaValidadaValoresServico validaValoresServico(boolean validaCidades, boolean validaDatas, String cidadesInput, String datasInput) {
+    private SaidaValidadaValoresServico validaValoresServico(boolean validaCidades, boolean validaDatas, String cidadesInput, String datasInput) {
         SaidaValidadaValoresServico saida = new SaidaValidadaValoresServico();
 
         if(validaCidades) {
@@ -429,11 +437,11 @@ public class ViewServicosPrestados {
         return saida;
     }
 
-    private static boolean haAgendamentosParaServico(Servico servico) {
+    private boolean haAgendamentosParaServico(Servico servico) {
         return (servico.getNumAgendamentos() > 0);
     }
 
-    private static void atualizaServicoSelecionado(Object servico) {
+    private void atualizaServicoSelecionado(Object servico) {
         servicoSelecionado = (Servico) servico;
     }
 

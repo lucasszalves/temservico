@@ -31,4 +31,20 @@ public class Agendamento {
     public LocalDate getData() {
         return data;
     }
+    public String getCPFcontratante() {
+        return CPFcontratante;
+    }
+
+    public void setCPFcontratante(String CPFcontratante) {
+        this.CPFcontratante = CPFcontratante;
+    }
+
+    public int getIDservico() {
+        return this.IDservico;
+    }
+
+    @Override
+    public String toString(){
+        return this.id + " " + this.IDservico + " " + this.CPFcontratante + " " + this.data;
+    }
 }

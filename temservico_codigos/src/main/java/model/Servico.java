@@ -10,7 +10,7 @@ public class Servico {
     private ArrayList<LocalDate> datasIndisponiveis;
     private ArrayList<String> imagensPaths;
     private ArrayList<Avaliacao> avaliacoes;
-    private ArrayList<Agendamento> agendamentos;
+    private int numAgendamentos;
     private double notaMedia;
     private double preco;
     private TipoServico tipo;
@@ -24,6 +24,7 @@ public class Servico {
         this.cidades = cidades;
         this.CPFprestador = prestador.getCPF();
         this.notaMedia = 0;
+        this.numAgendamentos = 0;
     }
 
     public String getPrestador() {
@@ -42,16 +43,9 @@ public class Servico {
         return notaMedia;
     }
 
-    public ArrayList<Agendamento> getAgendamentos() {
-        return agendamentos;
-    }
 
     public int getNumAgendamentos() {
-        ArrayList<Agendamento> agendamentos = getAgendamentos();
-        if(agendamentos == null){
-            return 0;
-        }
-        return agendamentos.size();
+        return numAgendamentos;
     }
 
     public ArrayList<Avaliacao> getAvaliacoes() {
@@ -82,8 +76,12 @@ public class Servico {
         this.datasIndisponiveis = datasIndisponiveis;
     }
 
-    public void setAgendamentos(ArrayList<Agendamento> agendamentos) {
-        this.agendamentos = agendamentos;
+    public void addAgendamento(){
+        this.numAgendamentos++;
+    }
+
+    public void rmAgendamento(){
+        this.numAgendamentos--;
     }
 
     public void setPreco(double preco) {
@@ -102,6 +100,13 @@ public class Servico {
         this.avaliacoes = avaliacoes;
     }
 
+    public String getCPFprestador() {
+        return CPFprestador;
+    }
+
+    public void setCPFprestador(String CPFprestador) {
+        this.CPFprestador = CPFprestador;
+    }
     @Override
     public String toString(){
         return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.CPFprestador;
