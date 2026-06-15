@@ -35,7 +35,7 @@ public class ViewServicosPrestados {
     }
 
     public void janelaServicosPrestados(){
-        mainController.printaTudo();
+//        mainController.printaTudo();
         JFrame frame = new JFrame("Serviços prestados");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);

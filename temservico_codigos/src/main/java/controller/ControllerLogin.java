@@ -71,6 +71,6 @@ public class ControllerLogin {
     }
 
     public void telaCadastro(){
-        mainController.uc01_cadastrarUsuario();
+        mainController.uc01_CreateUsuario();
     }
 }

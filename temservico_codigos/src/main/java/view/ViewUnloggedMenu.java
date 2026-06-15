@@ -1,10 +1,8 @@
 package view;
 
-import com.sun.tools.javac.Main;
 import controller.MainController;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class ViewUnloggedMenu extends JFrame {
@@ -72,7 +70,7 @@ public class ViewUnloggedMenu extends JFrame {
         });
 
         btnCadastrar.addActionListener(e -> {
-            controller.uc01_cadastrarUsuario();
+            controller.uc01_CreateUsuario();
             dispose();
         });
 

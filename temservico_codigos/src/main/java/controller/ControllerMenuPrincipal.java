@@ -23,7 +23,7 @@ public class ControllerMenuPrincipal {
     }
 
     public void detalhes() {
-
+        mainController.uc01_ReadUpdtDelUsuario();
     }
 
     public void servicosPrestados() {

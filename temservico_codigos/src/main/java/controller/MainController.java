@@ -49,9 +49,14 @@ public class MainController {
         viewUnloggedMenu.janelaMenuEntrar();
     }
 
-    public void uc01_cadastrarUsuario() {
+    public void uc01_CreateUsuario() {
         ControllerCadastroUsuario controllerCadastroUsuario = new ControllerCadastroUsuario(this, usuariosGerais);
         controllerCadastroUsuario.inicia();
+    }
+
+    public void uc01_ReadUpdtDelUsuario() {
+        ControllerReadUpdtDelUsuario controllerRUDUsuario = new ControllerReadUpdtDelUsuario(this, usuarioLogado);
+        controllerRUDUsuario.inicia();
     }
 
     public void uc02_login(){
