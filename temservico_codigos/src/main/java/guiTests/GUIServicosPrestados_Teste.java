@@ -33,7 +33,7 @@ public class GUIServicosPrestados_Teste {
         mc.addServicosGerais(servico1);
         mc.addServicosGerais(servico2);
         mc.addAgendamentosGerais(agendamento);
-        mc.setUsuarioLogado(user1);
+        mc.setUsuarioLogado(user2);
 //        mc.excluiUsuario(user1.getCPF());
         mc.mainMenu();
         mc.printaTudo();

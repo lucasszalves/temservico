@@ -15,7 +15,7 @@ public class ControllerReadUpdtDelUsuario {
         this.mainController = mainController;
         this.usuarioLogado = usuarioLogado;
         this.controllerMenuPrincipal = controllerMenuPrincipal;
-        view = new ViewReadUpdtDelUsuario(this, usuarioLogado);
+        view = new ViewReadUpdtDelUsuario(this, this.usuarioLogado);
     }
 
     public void inicia() {

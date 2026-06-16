@@ -65,9 +65,9 @@ public class ViewServicosPrestados {
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
-        JLabel title = new JLabel("Serviços Prestados", SwingConstants.CENTER);
-        title.setBounds(width/2 - 100, 10, 200, fieldHeight + 10);
-        title.setFont(title.getFont().deriveFont(20.0f));
+        JLabel title = new JLabel("Meus Serviços Prestados", SwingConstants.CENTER);
+        title.setBounds(width/2 - 250, 10, 500, fieldHeight + 10);
+        title.setFont(new Font("SansSerif", Font.BOLD, 28));
         panel.add(title);
 
         String stringPrestador = "Prestador: " + usuario.getNome();
@@ -82,10 +82,14 @@ public class ViewServicosPrestados {
         Object[][] dados = new Object[servicos.size()][5];
         for (int i = 0; i < servicos.size(); i++) {
             Servico s = servicos.get(i);
+            String notaMedia = String.valueOf(s.getNotaMedia());
+            if(s.getNotaMedia() > 5){
+                notaMedia = "N/A";
+            }
             dados[i][0] = s.getId();
             dados[i][1] = s.getTipo();
             dados[i][2] = s.getPreco();
-            dados[i][3] = s.getNotaMedia();
+            dados[i][3] = notaMedia;
             dados[i][4] = s.getNumAgendamentos();
         }
 

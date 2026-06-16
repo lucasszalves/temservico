@@ -1,6 +1,7 @@
 package controller;
 
 import model.Agendamento;
+import model.Avaliacao;
 import model.Servico;
 import model.Usuario;
 import view.ViewServicosPrestados;
@@ -71,6 +72,11 @@ public class MainController {
         view.janelaServicosPrestados();
     }
 
+    public void uc04_06_10_11_agendamentosUsuario() {
+        ControllerAgendamentosUsuario controllerAgendamentosUsuario = new ControllerAgendamentosUsuario(this.controllerMenuPrincipal, this.usuarioLogado, this);
+        controllerAgendamentosUsuario.inicia();
+    }
+
     public void loginSuccess(Usuario usuarioLogadoInput) {
         usuarioLogado = usuarioLogadoInput;
         mainMenu();
@@ -86,13 +92,16 @@ public class MainController {
         this.controllerMenuPrincipal.inicia();
     }
 
+    public void uc07_buscaServicos() {
+    }
+
     public void printUsuarios(){
         for(Usuario usuario : usuariosGerais){
             System.out.println(usuario);
         }
     }
 
-    private Usuario getUsuarioByCPF(String CPF) {
+    public Usuario getUsuarioByCPF(String CPF) {
         for(Usuario u : usuariosGerais){
             if(u.getCPF().equals(CPF)){
                 return u;
@@ -101,7 +110,7 @@ public class MainController {
         return null;
     }
 
-    private Servico getServicoByID(int id){
+    public Servico getServicoByID(int id){
         for(Servico s : servicosGerais){
             if(s.getId() == id){
                 return s;
@@ -110,7 +119,7 @@ public class MainController {
         return null;
     }
 
-    private Agendamento getAgendamentoByID(int id){
+    public Agendamento getAgendamentoByID(int id){
         for(Agendamento a : agendamentosGerais){
             if(a.getId() == id){
                 return a;
@@ -130,11 +139,50 @@ public class MainController {
         return servicosPrestados;
     }
 
+    public ArrayList<Servico> buscaServicosByParams(ParamsBuscaServico params){
+        ArrayList<Servico> servicosBuscados = new ArrayList<>();
+        for(Servico servico : this.servicosGerais){
+            if(params.isBuscaTipo() && !params.getTipoServico().equals(servico.getTipo())){
+                // se a busca procura por um tipo específico e o serviço não é desse tipo, continua
+                continue;
+            }
+            if(params.isBuscaNota() && !(params.getNotaMin() <= servico.getNotaMedia())) {
+                // se a busca procura por uma nota mínima e o serviço não tem a nota maior que ela, continua
+                continue;
+            }
+            if(params.isBuscaCidades() && !(params.getCidades().containsAll(servico.getCidades()))) {
+                // se a busca procura por cidades específicas e o serviço não atende um subset dessas cidades, continua
+                continue;
+            }
+            if(params.isBuscaPrecoMin() && !(params.getPrecoMin() <= servico.getPreco())) {
+                // se a busca procura por um preço mínimo e o serviço não tem o preço acima, continua
+                continue;
+            }
+            if(params.isBuscaPrecoMax() && !(params.getPrecoMax() >= servico.getPreco())) {
+                // se a busca procura por um preço máximo e o serviço não tem o preço abaixo, continua
+                continue;
+            }
+            servicosBuscados.add(servico);
+        }
+        return servicosBuscados;
+    }
+
     // agendamentos de serviços prestados pelo ID do servico
     public ArrayList<Agendamento> getAgendamentosServicoPrestado(int id){
         ArrayList<Agendamento> agendamentos = new ArrayList<>();
         for(Agendamento a : agendamentosGerais){
             if(a.getIDservico() == id){
+                agendamentos.add(a);
+            }
+        }
+        return agendamentos;
+    }
+
+    // agendamentos de serviços CONTRATADOS pelo usuário de CPF indicado
+    public ArrayList<Agendamento> getAgendamentosContratados(String CPF){
+        ArrayList<Agendamento> agendamentos = new ArrayList<>();
+        for(Agendamento a : agendamentosGerais){
+            if(a.getCPFcontratante().equals(CPF)){
                 agendamentos.add(a);
             }
         }
@@ -174,6 +222,15 @@ public class MainController {
                 if (configs.isEditaTipo()){
                     servico.setTipo(configs.getNovoTipo());
                 }
+                return;
+            }
+        }
+    }
+
+    public void addAvaliacaoServico(int idServico, Avaliacao avaliacao){
+        for (int i = 0; i < servicosGerais.size(); i++) {
+            if(servicosGerais.get(i).getId() == idServico){
+                servicosGerais.get(i).addAvaliacao(avaliacao);
                 return;
             }
         }
@@ -235,17 +292,6 @@ public class MainController {
         }
     }
 
-    // agendamentos de serviços CONTRATADOS pelo usuário de CPF indicado
-    public ArrayList<Agendamento> getAgendamentosContratados(String CPF){
-        ArrayList<Agendamento> agendamentos = new ArrayList<>();
-        for(Agendamento a : agendamentosGerais){
-            if(a.getCPFcontratante().equals(CPF)){
-                agendamentos.add(a);
-            }
-        }
-        return agendamentos;
-    }
-
     public void excluiAgendamento(int id){
         for (int i = 0; i < agendamentosGerais.size(); i++) {
             if(agendamentosGerais.get(i).getId() == id){
@@ -274,6 +320,7 @@ public class MainController {
             System.out.println(a);
         }
     }
+
 }
 
 

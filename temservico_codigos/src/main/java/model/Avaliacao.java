@@ -3,14 +3,15 @@ package model;
 import java.time.LocalDate;
 
 public class Avaliacao {
+    static int idClasse = 0;
     private int id;
     private Servico servico;
     private LocalDate data;
     private String descricao;
     private int nota;
 
-    Avaliacao(int id, Servico servico, LocalDate data, String descricao, int nota){
-        this.id = id;
+    public Avaliacao(Servico servico, LocalDate data, String descricao, int nota){
+        this.id = idClasse++;
         this.servico = servico;
         this.data = data;
         this.descricao = descricao;

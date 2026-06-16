@@ -12,6 +12,7 @@ public class Servico {
     private ArrayList<Avaliacao> avaliacoes;
     private int numAgendamentos;
     private double notaMedia;
+    private double somaNotas;
     private double preco;
     private TipoServico tipo;
     private String CPFprestador;
@@ -23,8 +24,10 @@ public class Servico {
         this.datasIndisponiveis = datasIndisponiveis;
         this.cidades = cidades;
         this.CPFprestador = prestador.getCPF();
-        this.notaMedia = 0;
+        this.notaMedia = 6;
+        this.somaNotas = 0;
         this.numAgendamentos = 0;
+        this.avaliacoes = new ArrayList<>();
     }
 
     public String getPrestador() {
@@ -98,6 +101,12 @@ public class Servico {
 
     public void setAvaliacoes(ArrayList<Avaliacao> avaliacoes) {
         this.avaliacoes = avaliacoes;
+    }
+
+    public void addAvaliacao(Avaliacao avaliacao){
+        this.avaliacoes.add(avaliacao);
+        this.somaNotas += avaliacao.getNota();
+        this.notaMedia = this.somaNotas / (this.avaliacoes.size());
     }
 
     public String getCPFprestador() {

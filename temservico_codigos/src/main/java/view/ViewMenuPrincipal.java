@@ -127,17 +127,17 @@ public class ViewMenuPrincipal extends JFrame {
 
         // AÇÕES ABAIXO
 
-        btnDetalhes.addActionListener(e -> {
+        btnDetalhes.addActionListener(e -> { // DONE
             controller.detalhes();
         });
-        btnServicosPrestados.addActionListener(e -> {
+        btnServicosPrestados.addActionListener(e -> { // DONE
             controller.servicosPrestados();
         });
         btnBuscarServicos.addActionListener(e -> {
-            System.out.println("buscar"); // TODO
+            controller.buscaServicos();
         });
-        btnAgendamentos.addActionListener(e -> {
-            System.out.println("agendamentos"); // TODO
+        btnAgendamentos.addActionListener(e -> { // DONE
+            controller.agendamentosUsuario();
         });
         btnLogout.addActionListener(e -> { //DONE
             controller.logout();

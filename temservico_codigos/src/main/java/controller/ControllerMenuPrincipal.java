@@ -30,7 +30,16 @@ public class ControllerMenuPrincipal {
         mainController.uc03_CRUDServicosPrestados();
     }
 
+    public void buscaServicos() {
+        mainController.uc07_buscaServicos();
+    }
+
+    public void agendamentosUsuario() {
+        mainController.uc04_06_10_11_agendamentosUsuario();
+    }
+
     public void fecha() {
         view.dispose();
     }
+
 }
