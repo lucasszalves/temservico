@@ -301,6 +301,10 @@ public class MainController {
     public void excluiServico(int id){
         for (int i = 0; i < servicosGerais.size(); i++) {
             if(servicosGerais.get(i).getId() == id){
+                Usuario prestador = getUsuarioByCPF(servicosGerais.get(i).getCPFprestador());
+                for(LocalDate data : servicosGerais.get(i).getDatasIndisponiveis()){
+                    liberaData(prestador, data);
+                }
                 excluiAgendamentosDoServico(servicosGerais.get(i));
                 servicosGerais.remove(i);
                 return;

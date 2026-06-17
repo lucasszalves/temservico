@@ -62,6 +62,7 @@ public class ViewServicosPrestados {
     }
 
     private JPanel servicosJPanel(int width, int height, Usuario usuario, JFrame framePai) {
+        mainController.printaTudo();
         JPanel panel = new JPanel();
         panel.setLayout(null);
 
