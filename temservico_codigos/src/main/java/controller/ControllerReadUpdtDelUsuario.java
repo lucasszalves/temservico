@@ -58,7 +58,7 @@ public class ControllerReadUpdtDelUsuario {
 
     public void excluiUsuario() {
         mainController.excluiUsuario(usuarioLogado.getCPF());
-        mainController.logout();
+        mainController.uc12_logout();
         this.controllerMenuPrincipal.fecha();
     }
 }

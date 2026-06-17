@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import static controller.myUtils.capitalizeStrings;
+
 public class Servico {
     private int id;
     static int idClasse = 0;
@@ -22,7 +24,7 @@ public class Servico {
         this.tipo = tipo;
         this.preco = preco;
         this.datasIndisponiveis = datasIndisponiveis;
-        this.cidades = cidades;
+        this.cidades = capitalizeStrings(cidades);
         this.CPFprestador = prestador.getCPF();
         this.notaMedia = 6;
         this.somaNotas = 0;

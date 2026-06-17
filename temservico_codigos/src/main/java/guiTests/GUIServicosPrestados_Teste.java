@@ -19,7 +19,8 @@ public class GUIServicosPrestados_Teste {
 
 
         ArrayList<String> cidades = new ArrayList<>();
-        cidades.add("Florianopolis");
+        cidades.add("florianopolis");
+        cidades.add("palhoca");
         Servico servico1 = new Servico(TipoServico.ENCANAMENTO, 250, new ArrayList<>(), cidades, user1);
         Servico servico2 = new Servico(TipoServico.ELETRICA, 100, new ArrayList<>(), cidades, user1);
 //
@@ -33,7 +34,7 @@ public class GUIServicosPrestados_Teste {
         mc.addServicosGerais(servico1);
         mc.addServicosGerais(servico2);
         mc.addAgendamentosGerais(agendamento);
-        mc.setUsuarioLogado(user2);
+        mc.setUsuarioLogado(user1);
 //        mc.excluiUsuario(user1.getCPF());
         mc.mainMenu();
         mc.printaTudo();

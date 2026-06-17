@@ -416,6 +416,9 @@ public class ViewServicosPrestados {
                 return saida;
             }
             String[] cidadesStrings = cidadesInput.split(",");
+            for (int i = 0; i < cidadesStrings.length; i++) {
+                cidadesStrings[i] = cidadesStrings[i].trim();
+            }
             saida.setCidades(new ArrayList<>(Arrays.asList(cidadesStrings)));
         }
 

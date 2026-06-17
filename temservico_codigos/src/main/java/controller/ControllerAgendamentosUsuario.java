@@ -13,10 +13,8 @@ public class ControllerAgendamentosUsuario {
     private MainController mainController;
     private Usuario usuarioLogado;
     private ViewAgendamentosUsuario view;
-    private ControllerMenuPrincipal controllerMenuPrincipal;
 
     public ControllerAgendamentosUsuario(ControllerMenuPrincipal controllerMenuPrincipal, Usuario usuarioLogado, MainController mainController) {
-        this.controllerMenuPrincipal = controllerMenuPrincipal;
         this.usuarioLogado = usuarioLogado;
         this.mainController = mainController;
         view = new ViewAgendamentosUsuario(this, this.usuarioLogado);

@@ -19,7 +19,7 @@ public class ControllerMenuPrincipal {
     }
 
     public void logout() {
-        mainController.logout();
+        mainController.uc12_logout();
     }
 
     public void detalhes() {

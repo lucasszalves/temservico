@@ -10,6 +10,8 @@ import view.ViewUnloggedMenu;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import static controller.myUtils.capitalize;
+
 public class MainController {
     private ArrayList<Usuario> usuariosGerais;
     private ArrayList<Servico> servicosGerais;
@@ -34,11 +36,12 @@ public class MainController {
 
     public void addUsuariosGerais(Usuario usuario){
         this.usuariosGerais.add(usuario);
-        printUsuarios();
     }
 
     public void addServicosGerais(Servico servico){
         this.servicosGerais.add(servico);
+        printaTudo();
+        System.out.println(servico.getCidades().size());
     }
 
     public void addAgendamentosGerais(Agendamento agendamento){
@@ -66,6 +69,11 @@ public class MainController {
         controllerLogin.inicia();
     }
 
+    public void mainMenu(){
+        this.controllerMenuPrincipal = new ControllerMenuPrincipal(this, usuarioLogado);
+        this.controllerMenuPrincipal.inicia();
+    }
+
     public void uc03_CRUDServicosPrestados(){
         // feito antes de ser implementado o MVC corretamente, por isso ta tudo na View :|
         ViewServicosPrestados view = new ViewServicosPrestados(this, usuarioLogado);
@@ -82,17 +90,15 @@ public class MainController {
         mainMenu();
     }
 
-    public void logout(){
+    public void uc12_logout(){
         usuarioLogado = null;
         menuEntrar();
     }
 
-    public void mainMenu(){
-        this.controllerMenuPrincipal = new ControllerMenuPrincipal(this, usuarioLogado);
-        this.controllerMenuPrincipal.inicia();
-    }
 
     public void uc07_buscaServicos() {
+        ControllerBuscaServicos controllerBuscaServicos = new ControllerBuscaServicos(this);
+        controllerBuscaServicos.inicia();
     }
 
     public void printUsuarios(){
@@ -150,7 +156,7 @@ public class MainController {
                 // se a busca procura por uma nota mínima e o serviço não tem a nota maior que ela, continua
                 continue;
             }
-            if(params.isBuscaCidades() && !(params.getCidades().containsAll(servico.getCidades()))) {
+            if(params.isBuscaCidade() && !(servico.getCidades().contains(capitalize(params.getCidade())))) {
                 // se a busca procura por cidades específicas e o serviço não atende um subset dessas cidades, continua
                 continue;
             }
@@ -201,7 +207,6 @@ public class MainController {
                 if(configs.isEditaSenha()){
                     u.changeSenha(configs.getNovaSenha());
                 }
-                printUsuarios();
                 return;
             }
         }
