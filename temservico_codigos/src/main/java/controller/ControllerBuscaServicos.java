@@ -1,8 +1,10 @@
 package controller;
 
 import model.Servico;
+import model.Usuario;
 import view.ViewBuscaServicos;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ControllerBuscaServicos {
@@ -42,5 +44,10 @@ public class ControllerBuscaServicos {
 
     public ArrayList<Servico> getResultadoBusca() {
         return resultadoBusca;
+    }
+
+    public boolean agendaServico(LocalDate data, Servico servico){
+        Usuario prestador = mainController.getUsuarioByCPF(servico.getCPFprestador());
+        return false;
     }
 }

@@ -20,17 +20,10 @@ public class Agendamento {
         return id;
     }
 
-    public int getServico() {
-        return IDservico;
-    }
-
-    public String getContratante() {
-        return CPFcontratante;
-    }
-
     public LocalDate getData() {
         return data;
     }
+
     public String getCPFcontratante() {
         return CPFcontratante;
     }

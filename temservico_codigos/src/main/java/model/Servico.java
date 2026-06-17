@@ -32,10 +32,6 @@ public class Servico {
         this.avaliacoes = new ArrayList<>();
     }
 
-    public String getPrestador() {
-        return CPFprestador;
-    }
-
     public TipoServico getTipo() {
         return tipo;
     }

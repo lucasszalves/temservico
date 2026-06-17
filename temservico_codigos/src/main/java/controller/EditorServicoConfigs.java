@@ -24,6 +24,14 @@ public class EditorServicoConfigs {
         this.editaTipo = editaTipo;
     }
 
+    public EditorServicoConfigs(int id, boolean editaCidades, boolean editaDatasIndisp, boolean editaPreco, boolean editaTipo, ArrayList<LocalDate> novasDatasIndisp) {
+        this.id = id;
+        this.editaCidades = editaCidades;
+        this.editaDatasIndisp = editaDatasIndisp;
+        this.editaPreco = editaPreco;
+        this.novasDatasIndisp = novasDatasIndisp;
+        this.editaTipo = editaTipo;
+    }
 
     public int getId() {
         return id;

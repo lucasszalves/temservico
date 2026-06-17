@@ -8,6 +8,7 @@ import view.ViewServicosPrestados;
 import view.ViewUnloggedMenu;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static controller.myUtils.capitalize;
@@ -40,8 +41,8 @@ public class MainController {
 
     public void addServicosGerais(Servico servico){
         this.servicosGerais.add(servico);
+        addDatasIndispUsuario(servico.getDatasIndisponiveis(), servico.getCPFprestador());
         printaTudo();
-        System.out.println(servico.getCidades().size());
     }
 
     public void addAgendamentosGerais(Agendamento agendamento){
@@ -173,6 +174,16 @@ public class MainController {
         return servicosBuscados;
     }
 
+    public void agendaServico(Agendamento agendamento){
+        ArrayList<LocalDate> data = new ArrayList<>();
+        data.add(agendamento.getData());
+        Usuario contratante = getUsuarioByCPF(agendamento.getCPFcontratante());
+        Usuario prestador = getUsuarioByCPF(getServicoByID(agendamento.getIDservico()).getCPFprestador());
+        addDatasIndispUsuario(data, contratante.getCPF());
+        addDatasIndispUsuario(data, prestador.getCPF());
+        addAgendamentosGerais(agendamento);
+    }
+
     // agendamentos de serviços prestados pelo ID do servico
     public ArrayList<Agendamento> getAgendamentosServicoPrestado(int id){
         ArrayList<Agendamento> agendamentos = new ArrayList<>();
@@ -206,6 +217,17 @@ public class MainController {
                 }
                 if(configs.isEditaSenha()){
                     u.changeSenha(configs.getNovaSenha());
+                }
+                return;
+            }
+        }
+    }
+
+    public void addDatasIndispUsuario(ArrayList<LocalDate> datas, String CPF){
+        for(Usuario u : this.usuariosGerais){
+            if(u.getCPF().equals(CPF)){
+                for(LocalDate d : datas){
+                    u.addDatasIndisponiveis(d);
                 }
                 return;
             }
@@ -265,7 +287,6 @@ public class MainController {
     public void excluiServicosPrestados(Usuario usuario){
         for (int i = servicosGerais.size() - 1; i >= 0; i--) {
             if(servicosGerais.get(i).getCPFprestador().equals(usuario.getCPF())){
-//                System.out.println(servicosGerais.get(i));
                 excluiAgendamentosDoServico(servicosGerais.get(i));
                 servicosGerais.remove(i);
             }

@@ -135,7 +135,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return this.nome + ", " + this.CPF + ", " + this.email;
+        return this.nome + ", " + this.CPF + ", " + this.email + ", " + this.datasIndisponiveis;
     }
 
 }
