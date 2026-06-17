@@ -5,3 +5,5 @@ codigos/out/
 codigos/!**/src/main/**/out/
 codigos/!**/src/test/**/out/
 codigos/.kotlin
+
+*.class
