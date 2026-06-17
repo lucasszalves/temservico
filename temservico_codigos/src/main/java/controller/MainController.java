@@ -42,7 +42,6 @@ public class MainController {
     public void addServicosGerais(Servico servico){
         this.servicosGerais.add(servico);
         addDatasIndispUsuario(servico.getDatasIndisponiveis(), servico.getCPFprestador());
-        printaTudo();
     }
 
     public void addAgendamentosGerais(Agendamento agendamento){
@@ -182,7 +181,6 @@ public class MainController {
         addDatasIndispUsuario(data, contratante.getCPF());
         addDatasIndispUsuario(data, prestador.getCPF());
         addAgendamentosGerais(agendamento);
-        printaTudo();
     }
 
     // agendamentos de serviços prestados pelo ID do servico
@@ -270,7 +268,6 @@ public class MainController {
                 excluiAgendamentosDeServicoContratado(usuariosGerais.get(i));
                 excluiServicosPrestados(usuariosGerais.get(i));
                 usuariosGerais.remove(i);
-                printaTudo();
                 return;
             }
         }
@@ -334,7 +331,6 @@ public class MainController {
                 liberaData(prestador, data);
                 liberaData(contratante, data);
                 agendamentosGerais.remove(i);
-                printaTudo();
                 return;
             }
         }
