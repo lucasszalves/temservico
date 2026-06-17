@@ -1,5 +1,6 @@
 package controller;
 
+import model.Agendamento;
 import model.Servico;
 import model.Usuario;
 import view.ViewBuscaServicos;
@@ -11,9 +12,11 @@ public class ControllerBuscaServicos {
     private MainController mainController;
     private ViewBuscaServicos view;
     private ArrayList<Servico> resultadoBusca;
+    private Usuario usuarioLogado;
 
-    public ControllerBuscaServicos(MainController mainController) {
+    public ControllerBuscaServicos(MainController mainController, Usuario usuarioLogado) {
         this.mainController = mainController;
+        this.usuarioLogado = usuarioLogado;
         this.view = new ViewBuscaServicos(this);
     }
 
@@ -48,6 +51,17 @@ public class ControllerBuscaServicos {
 
     public boolean agendaServico(LocalDate data, Servico servico){
         Usuario prestador = mainController.getUsuarioByCPF(servico.getCPFprestador());
-        return false;
+        if(prestador.getDatasIndisponiveis().contains(data)){
+            return false;
+        }
+        else{
+            Agendamento agendamento = new Agendamento(servico, usuarioLogado, data);
+            mainController.agendaServico(agendamento);
+            return true;
+        }
+    }
+
+    public Usuario getUsuarioByCPF(String CPF) {
+        return mainController.getUsuarioByCPF(CPF);
     }
 }

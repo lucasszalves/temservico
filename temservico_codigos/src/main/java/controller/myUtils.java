@@ -1,5 +1,8 @@
 package controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class myUtils {
@@ -25,6 +28,11 @@ public class myUtils {
 
     public static String capitalize(String string){
         return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
+
+    public static LocalDate validateDate(String date) throws DateTimeParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(date, formatter);
     }
 
     public static void main(String[] args) {

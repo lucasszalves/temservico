@@ -98,7 +98,7 @@ public class MainController {
 
 
     public void uc07_buscaServicos() {
-        ControllerBuscaServicos controllerBuscaServicos = new ControllerBuscaServicos(this);
+        ControllerBuscaServicos controllerBuscaServicos = new ControllerBuscaServicos(this, usuarioLogado);
         controllerBuscaServicos.inicia();
     }
 
@@ -182,6 +182,7 @@ public class MainController {
         addDatasIndispUsuario(data, contratante.getCPF());
         addDatasIndispUsuario(data, prestador.getCPF());
         addAgendamentosGerais(agendamento);
+        printaTudo();
     }
 
     // agendamentos de serviços prestados pelo ID do servico
