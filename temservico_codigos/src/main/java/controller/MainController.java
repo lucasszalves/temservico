@@ -321,11 +321,22 @@ public class MainController {
     public void excluiAgendamento(int id){
         for (int i = 0; i < agendamentosGerais.size(); i++) {
             if(agendamentosGerais.get(i).getId() == id){
-                getServicoByID(agendamentosGerais.get(i).getIDservico()).rmAgendamento();
+                Servico servico = getServicoByID(agendamentosGerais.get(i).getIDservico());
+                Usuario prestador = getUsuarioByCPF(servico.getCPFprestador());
+                Usuario contratante = getUsuarioByCPF(agendamentosGerais.get(i).getCPFcontratante());
+                LocalDate data = agendamentosGerais.get(i).getData();
+                servico.rmAgendamento();
+                liberaData(prestador, data);
+                liberaData(contratante, data);
                 agendamentosGerais.remove(i);
+                printaTudo();
                 return;
             }
         }
+    }
+
+    private void liberaData(Usuario usuario, LocalDate data) {
+        usuario.liberaData(data);
     }
 
     public void setUsuarioLogado(Usuario usuarioLogado) {

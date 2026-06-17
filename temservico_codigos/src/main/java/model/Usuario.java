@@ -93,6 +93,10 @@ public class Usuario {
         this.datasIndisponiveis.add(data);
     }
 
+    public void liberaData(LocalDate data) {
+        this.datasIndisponiveis.remove(data);
+    }
+
     public void setDatasIndisponiveis(ArrayList<LocalDate> datasIndisponiveis) {
         this.datasIndisponiveis = datasIndisponiveis;
     }
@@ -137,5 +141,6 @@ public class Usuario {
     public String toString() {
         return this.nome + ", " + this.CPF + ", " + this.email + ", " + this.datasIndisponiveis;
     }
+
 
 }

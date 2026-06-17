@@ -50,4 +50,8 @@ public class ControllerAgendamentosUsuario {
         view = new ViewAgendamentosUsuario(this, usuarioLogado);
         inicia();
     }
+
+    public void addServicoConcluido(Servico servico) {
+        servico.addServicoConcluido();
+    }
 }

@@ -13,6 +13,7 @@ public class Servico {
     private ArrayList<String> imagensPaths;
     private ArrayList<Avaliacao> avaliacoes;
     private int numAgendamentos;
+    private int servicosConcluidos;
     private double notaMedia;
     private double somaNotas;
     private double preco;
@@ -29,6 +30,7 @@ public class Servico {
         this.notaMedia = 6;
         this.somaNotas = 0;
         this.numAgendamentos = 0;
+        this.servicosConcluidos = 0;
         this.avaliacoes = new ArrayList<>();
     }
 
@@ -44,9 +46,12 @@ public class Servico {
         return notaMedia;
     }
 
-
     public int getNumAgendamentos() {
         return numAgendamentos;
+    }
+
+    public int getServicosConcluidos() {
+        return servicosConcluidos;
     }
 
     public ArrayList<Avaliacao> getAvaliacoes() {
@@ -85,6 +90,10 @@ public class Servico {
         this.numAgendamentos--;
     }
 
+    public void addServicoConcluido(){
+        this.servicosConcluidos++;
+    }
+
     public void setPreco(double preco) {
         this.preco = preco;
     }
@@ -116,6 +125,6 @@ public class Servico {
     }
     @Override
     public String toString(){
-        return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.CPFprestador;
+        return this.id + " " + this.preco + " " + this.cidades + " " + this.datasIndisponiveis + " " + this.tipo + " " + this.CPFprestador + " " + this.servicosConcluidos;
     }
 }

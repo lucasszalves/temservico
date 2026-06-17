@@ -161,6 +161,7 @@ public class ViewAgendamentosUsuario extends JFrame {
             timer.start();
             dialog.setVisible(true);
             controller.excluiAgendamento(agendamentoSelecionado);
+            controller.addServicoConcluido(servico);
             controller.refresh();
             if(JOptionPane.showConfirmDialog(this,
                     "Deseja avaliar o serviço?",

@@ -78,8 +78,8 @@ public class ViewServicosPrestados {
         // gera tabela de servicos do usuário
         ArrayList<Servico> servicos = mainController.getServicosPrestados(usuario.getCPF());
 
-        String[] colunas = {"ID", "Tipo", "Preço", "Nota média", "Nº de agendamentos"};
-        Object[][] dados = new Object[servicos.size()][5];
+        String[] colunas = {"ID", "Tipo", "Preço", "Nota média", "Marcados", "Concluídos"};
+        Object[][] dados = new Object[servicos.size()][6];
         for (int i = 0; i < servicos.size(); i++) {
             Servico s = servicos.get(i);
             String notaMedia = String.valueOf(s.getNotaMedia());
@@ -91,6 +91,7 @@ public class ViewServicosPrestados {
             dados[i][2] = s.getPreco();
             dados[i][3] = notaMedia;
             dados[i][4] = s.getNumAgendamentos();
+            dados[i][5] = s.getServicosConcluidos();
         }
 
         DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
